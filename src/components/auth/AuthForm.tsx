@@ -12,8 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { LoaderCircle, Mail, Lock, User } from 'lucide-react'
 import { toast } from "sonner"
 
-import { signinSchema, signupSchema, FormValues } from "@/lib/validations/user"
-import { signin, signup } from "@/actions/auth"
+import { signinSchema, signupSchema, AuthValues } from "@/lib/validations/user"
+import apiClient from "@/lib/apiClient"
 
 type AuthFormProps = {
   mode: 'signup' | 'signin'
@@ -23,29 +23,29 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<FormValues>({
+  const form = useForm<AuthValues>({
       resolver: zodResolver(mode === 'signup' ? signupSchema : signinSchema),
       defaultValues: mode === 'signup' 
         ? { name: '', email: '', password: '' }
         : { email: '', password: '' }
   })
  
-  async function onSubmit(values: FormValues) {
-    console.log(values)
+  async function onSubmit(values: AuthValues) {
     setIsLoading(true)
 
     try {
+      await apiClient('/api/auth', 'POST', {
+        data: {...values, mode}
+      });
+      
       if(mode === "signup") {
-        if ('name' in values) { // TypeScript now knows `values` is signupSchema
-          await signup(values);
-        }
-        toast.success('Account created successfully.')
-        router.push('/dashboard')
-      } else if(mode === "signin") {
-        await signin(values);
-        toast.success('Successfully signed in.')
-        router.push('/dashboard')
+        toast.success('Account created successfully');
+        router.push('/onboarding')
+      } else if(mode == "signin") {
+        toast.success('Signed in successfullly');
+        router.push('/dashboard')      
       }
+
     } catch (error:any) {
       toast.error(error.message)
     } finally {
@@ -54,7 +54,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <div className="w-full md:w-md h-screen md:max-h-[500px] py-4 px-6 flex flex-col gap-2 bg-card">
+    <div className="w-full sm:w-md h-screen sm:h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
       <div className="text-center">
         <h1 className="text-2xl font-bold tracking-tight">
           {mode === 'signup' 
