@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     if(!mode) {
       return NextResponse.json(
         { message: 'Invalid Request' },
-        { status: 404 }
+        { status: 400 }
       );
     }
     
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     const authCookie = data.data.token;
 
-    const response = NextResponse.json(data);
+    const response = NextResponse.json(data, {status: res.status || 200});
     response.cookies.set('token', authCookie || '', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

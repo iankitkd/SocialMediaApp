@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { ArrowRight,Sparkles} from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { features } from '@/lib/data';
+import { features } from '@/data/features';
 
 const APP_NAME = process.env.APP_NAME || "";
 

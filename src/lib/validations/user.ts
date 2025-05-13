@@ -21,6 +21,7 @@ export const signinSchema = z.object({
   }),
 })
 
+
 export const profileSchema = z.object({
   name: z.string()
     .min(2, 'Name must be at least 2 characters.')
@@ -51,7 +52,9 @@ export const profileSchema = z.object({
   photoUrl: z.string()
     // .url('Photo URL must be a valid URL')
     // .regex(/\.(jpeg|jpg|gif|png|webp)$/, 'Photo URL must point to an image file')
-    .optional()
+    .optional(),
+  isOnboarded: z.boolean()
+    .optional(),
 });
 
 

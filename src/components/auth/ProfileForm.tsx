@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,35 +11,84 @@ import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import DatePicker from "../shared/DatePicker"
-import { CircleUserRound, LoaderCircle } from 'lucide-react'
+import { CircleCheckBig, CircleUserRound, CircleX, LoaderCircle } from 'lucide-react'
 import { toast } from "sonner"
 
 import { profileSchema, ProfileValues } from "@/lib/validations/user"
+import { isUsernameAvailable, updateUser } from "@/lib/actions/user"
+import { debounce } from "@/utils/debounce"
 
 type ProfileFormProps = {
-  mode: 'onboarding' | 'edit'
+  mode: 'onboarding' | 'edit';
+  initialData?: ProfileValues;
 }
 
-export default function ProfileForm({ mode }: ProfileFormProps) {
-
+export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<ProfileValues>({
       resolver: zodResolver(profileSchema),
-      defaultValues: {
-        name: undefined,
-        username: "",
-        bio: "",
-        gender: undefined,
-        birthDate: undefined,
-        photoUrl: "",
-      }
+      defaultValues: initialData 
+        ? initialData 
+        : {
+          name: undefined,
+          username: "",
+          bio: "",
+          gender: undefined,
+          birthDate: undefined,
+          photoUrl: "",
+          isOnboarded: true,
+        }
   })
   
   async function onSubmit(values:ProfileValues) {
-    console.log("here")
-    console.log(values);
+    setIsLoading(true);
+
+    try {
+      await updateUser(values);
+      
+      if(mode === "edit") {
+        toast.success('Account updated successfully');
+        router.push('/profile')
+      } else if (mode === "onboarding") {
+        router.push('/home')
+      }
+
+    } catch (error:any) {
+      toast.error(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
+  
+  
+  const checkAvailability = useCallback(
+    debounce(async (username: string) => {
+      if (username.trim() === "") {
+        form.clearErrors("username");
+        return;
+      }
+
+      const isAvailable = await isUsernameAvailable(username);
+
+      if (isAvailable) {
+        form.clearErrors("username");
+      } else {
+        form.setError("username", {
+          type: "manual",
+          message: "Username is already taken.",
+        });
+      }
+    }, 1000),
+    []
+  );
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const username = e.target.value;
+    form.setValue("username", username);
+    checkAvailability(username);
+  };
   
   return (
     <div className="w-full sm:w-md h-screen sm:h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
@@ -91,7 +139,13 @@ export default function ProfileForm({ mode }: ProfileFormProps) {
               <FormItem>
                 <FormLabel>Username <span className="text-red-500 -ml-1">*</span></FormLabel>
                 <FormControl>
-                    <Input type="username" placeholder="" {...field} />
+                  <div className="relative">
+                    { !!form.formState.errors.username 
+                        ? (<CircleX color="red" className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2" />)
+                        : (field.value && <CircleCheckBig color="green" className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2" />)
+                    }
+                    <Input type="username" placeholder="" value = {field.value} onChange={handleUsernameChange} className="pr-9"/>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,7 +206,7 @@ export default function ProfileForm({ mode }: ProfileFormProps) {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading || Object.keys(form.formState.errors).length > 0}>
             {isLoading ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (

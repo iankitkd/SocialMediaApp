@@ -43,7 +43,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         router.push('/onboarding')
       } else if(mode == "signin") {
         toast.success('Signed in successfullly');
-        router.push('/dashboard')      
+        router.push('/home')      
       }
 
     } catch (error:any) {
@@ -122,7 +122,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading || Object.keys(form.formState.errors).length > 0}>
             {isLoading ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : mode === 'signup' ? (
