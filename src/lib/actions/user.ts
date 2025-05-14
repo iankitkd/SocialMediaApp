@@ -23,13 +23,37 @@ export async function getCurrentUser() {
   return res.ok ? data.data : null;
 }
 
+export async function getUserByUsername(username: string) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    const res = await fetch(`${BACKEND_URL}/user/${username}`, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
+
+    if(!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || "Internal server error");
+    }
+
+    const data = await res.json();
+    return data.data;
+    
+  } catch (error:any) {
+      throw new Error(error.message || "Internal server error");
+  }
+}
+
 
 export async function updateUser(data: ProfileValues) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    if (!token) return null;
+    if (!token) throw new Error("Not authorized");
 
     const res = await fetch(`${BACKEND_URL}/profile/update`, {
       method: "POST",
@@ -45,8 +69,8 @@ export async function updateUser(data: ProfileValues) {
     if(!res.ok) {
       throw new Error(response.message || "Update Failed");
     }
-  } catch (error) {
-      throw error;
+  } catch (error:any) {
+      throw new Error(error.message || 'Something went wrong');;
   }
 }
 
@@ -55,7 +79,7 @@ export async function isUsernameAvailable(username:string) {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
-    if (!token) return null;
+    if (!token) throw new Error("Not authorized");
 
     const res = await fetch(`${BACKEND_URL}/validate-username`, {
       method: "POST",
@@ -73,7 +97,7 @@ export async function isUsernameAvailable(username:string) {
     }
 
     return response.data;
-  } catch (error) {
-    throw error;
+  } catch (error:any) {
+    throw new Error(error.message || 'Something went wrong');
   }
 }

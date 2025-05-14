@@ -70,15 +70,19 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
         return;
       }
 
-      const isAvailable = await isUsernameAvailable(username);
+      try {
+        const isAvailable = await isUsernameAvailable(username);
 
-      if (isAvailable) {
-        form.clearErrors("username");
-      } else {
-        form.setError("username", {
-          type: "manual",
-          message: "Username is already taken.",
-        });
+        if (isAvailable) {
+          form.clearErrors("username");
+        } else {
+          form.setError("username", {
+            type: "manual",
+            message: "Username is already taken.",
+          });
+        }
+      } catch (error:any) {
+        toast.error(error.message);
       }
     }, 1000),
     []

@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { LoaderCircle, Mail, Lock, User } from 'lucide-react'
+import { LoaderCircle, Mail, Lock, User, Eye, EyeOff } from 'lucide-react'
 import { toast } from "sonner"
 
 import { signinSchema, signupSchema, AuthValues } from "@/lib/validations/user"
@@ -22,6 +22,7 @@ type AuthFormProps = {
 export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const form = useForm<AuthValues>({
       resolver: zodResolver(mode === 'signup' ? signupSchema : signinSchema),
@@ -114,7 +115,15 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 <FormControl>
                   <div className="relative">
                       <Lock className="absolute h-4 w-4 left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input type="password" placeholder="******" className="pl-9" {...field} />
+                      <Input type={isPasswordVisible ? "text": "password"} placeholder="******" className="pl-9 pr-9" {...field} />
+                      { isPasswordVisible ? (
+                          <EyeOff onClick={() => setIsPasswordVisible((prev)=>!prev)} 
+                              className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2 text-muted-foreground"/>
+                        ) : (
+                          <Eye onClick={() => setIsPasswordVisible((prev)=>!prev)}  
+                              className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2 text-muted-foreground"/>
+                        )
+                      }
                   </div>
                 </FormControl>
                 <FormMessage />

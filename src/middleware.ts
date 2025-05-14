@@ -4,7 +4,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
 
   const publicRoutes = ['/signup']
-  const protectedRoutes = ['/profile']
+  const protectedRoutes = ['/profile', '/logout']
   const isProtected = protectedRoutes.some(route => 
     req.nextUrl.pathname.startsWith(route)
   )
@@ -21,7 +21,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", '/login', '/signup'],
+  matcher: ["/profile/:path*", '/login', '/signup', '/logout'],
 };
 
 
