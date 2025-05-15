@@ -13,8 +13,8 @@ const inter = Inter({
 const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
-  weight: ["400", "600", "700"], // optional: add if you need specific font weights
-  display: "swap", // optional: recommended for performance
+  weight: ["400", "600", "700"],
+  display: "swap",
 });
 
 const geistSans = Geist({
@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         <UserStoreInitializer />
         {children}
