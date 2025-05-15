@@ -6,21 +6,25 @@ const BACKEND_URL = process.env.BACKEND_API_URL;
 
 import { ProfileValues } from "@/lib/validations/user"
 
-
 export async function getCurrentUser() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
 
-  if (!token) return null;
+    if (!token) return null;
 
-  const res = await fetch(`${BACKEND_URL}/profile`, {
-    headers: {
-      Cookie: `token=${token}`,
-    },
-  });
+    const res = await fetch(`${BACKEND_URL}/profile`, {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
 
-  const data = await res.json();
-  return res.ok ? data.data : null;
+    const data = await res.json();
+    
+    return res.ok ? data.data : null;
+  } catch (error) {
+      throw new Error("Internal server error");
+  }
 }
 
 export async function getUserByUsername(username: string) {

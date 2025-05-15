@@ -34,8 +34,9 @@ export async function POST(request: Request) {
     }
 
     const authCookie = data.data.token;
+    const user = data.data.user;
 
-    const response = NextResponse.json(data, {status: res.status || 200});
+    const response = NextResponse.json(user, {status: res.status || 200});
     response.cookies.set('token', authCookie || '', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

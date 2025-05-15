@@ -33,7 +33,6 @@ export const sideNavItems = [
   },
 ];
 
-// {user ? `/${user.username}` : '/login'}
 
 export const bottomNavItems = [
   { 

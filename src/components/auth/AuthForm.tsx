@@ -14,6 +14,7 @@ import { toast } from "sonner"
 
 import { signinSchema, signupSchema, AuthValues } from "@/lib/validations/user"
 import apiClient from "@/lib/apiClient"
+import { useUserStore } from "@/lib/store/userStore"
 
 type AuthFormProps = {
   mode: 'signup' | 'signin'
@@ -23,6 +24,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const setUser = useUserStore((state) => state.setUser)
 
   const form = useForm<AuthValues>({
       resolver: zodResolver(mode === 'signup' ? signupSchema : signinSchema),
@@ -35,9 +38,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setIsLoading(true)
 
     try {
-      await apiClient('/api/auth', 'POST', {
+      const user = await apiClient('/api/auth', 'POST', {
         data: {...values, mode}
       });
+
+      setUser(user);
       
       if(mode === "signup") {
         toast.success('Account created successfully');
