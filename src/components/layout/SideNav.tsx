@@ -39,7 +39,6 @@ function SideNavContent() {
   }, [username])
 
   return (
-    <aside className="hidden md:flex flex-col h-screen lg:w-64 px-4 py-4 border-r">
       <div className="flex flex-col justify-between items-center lg:items-stretch h-full">
         <div>
           {/* Logo */}
@@ -103,6 +102,5 @@ function SideNavContent() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </aside>
   )
 }

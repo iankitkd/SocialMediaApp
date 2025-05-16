@@ -86,7 +86,8 @@
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.546 0.245 262.881);
-  --primary-foreground: oklch(0.379 0.146 265.522);
+  /* --primary-foreground: oklch(0.379 0.146 265.522); */
+  --primary-foreground: oklch(0.92 0.05 262.881);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.274 0.006 286.033);
@@ -123,4 +124,24 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width:5px;
+    height:5px;
+} 
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-foreground);
+    border-radius: 5px;
 }

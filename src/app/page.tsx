@@ -6,7 +6,7 @@ const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Social App";
 
 export default function Home() {
   return (
-    <div className="min-h-[calc(100dvh+64px)] flex flex-col bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-[calc(100vh+64px)] flex flex-col bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Navigation */}
       <header className="px-6 py-4 flex items-center justify-between w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">

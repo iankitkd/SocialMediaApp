@@ -29,7 +29,7 @@ function BottomNavContent() {
     }, [username])
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t bg-background/80">
       <div className="flex justify-around items-center py-1">
         {navItems.map((item) => { 
           const isActive = pathname === item.href;

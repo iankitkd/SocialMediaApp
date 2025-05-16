@@ -53,6 +53,8 @@ export const profileSchema = z.object({
     // .url('Photo URL must be a valid URL')
     // .regex(/\.(jpeg|jpg|gif|png|webp)$/, 'Photo URL must point to an image file')
     .optional(),
+  location: z.string()
+    .optional(),
   isOnboarded: z.boolean()
     .optional(),
 });

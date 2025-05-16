@@ -212,6 +212,20 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                    <Input type="text" placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit" className="w-full" disabled={isLoading || Object.keys(form.formState.errors).length > 0}>
             {isLoading ? (
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
