@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic';
+
+import { redirect } from 'next/navigation';
+
 import ProfileForm from '@/components/auth/ProfileForm'
 import { getCurrentUser } from '@/lib/actions/user';
-import { redirect } from 'next/navigation';
-import React from 'react'
 
 export default async function page() {
   const user = await getCurrentUser();
