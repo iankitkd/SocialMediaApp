@@ -39,6 +39,9 @@ export async function getUserByUsername(username: string) {
     });
 
     if(!res.ok) {
+      if (res.status === 404) {
+        return null;
+      }
       const error = await res.json();
       throw new Error(error.message || "Internal server error");
     }

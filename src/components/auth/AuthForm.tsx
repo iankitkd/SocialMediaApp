@@ -60,7 +60,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <div className="w-full sm:w-md h-screen sm:h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
+    <div className="w-full sm:w-md h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
       <div className="text-center">
         <h1 className="text-2xl font-bold tracking-tight">
           {mode === 'signup' 

@@ -22,7 +22,7 @@ export default function page() {
     }
 
   return (
-    <div className='w-full h-screen flex items-center justify-center bg-foreground/50'>
+    <div className='w-full min-h-dvh flex items-center justify-center bg-foreground/50'>
       <ConfirmationCard
         title="Confirm Logout"
         description="Are you sure you want to log out?"

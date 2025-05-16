@@ -17,6 +17,7 @@ import { toast } from "sonner"
 import { profileSchema, ProfileValues } from "@/lib/validations/user"
 import { isUsernameAvailable, updateUser } from "@/lib/actions/user"
 import { debounce } from "@/utils/debounce"
+import { useUserStore } from "@/lib/store/userStore"
 
 type ProfileFormProps = {
   mode: 'onboarding' | 'edit';
@@ -24,13 +25,14 @@ type ProfileFormProps = {
 }
 
 export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
+  const {username} = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<ProfileValues>({
       resolver: zodResolver(profileSchema),
       defaultValues: initialData 
-        ? initialData 
+        ? {...initialData, birthDate: new Date(initialData.birthDate || "")} 
         : {
           name: undefined,
           username: "",
@@ -50,7 +52,7 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
       
       if(mode === "edit") {
         toast.success('Account updated successfully');
-        router.push('/profile')
+        router.push(`/${username}`)
       } else if (mode === "onboarding") {
         router.push('/home')
       }
@@ -95,7 +97,7 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
   };
   
   return (
-    <div className="w-full sm:w-md h-screen sm:h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
+    <div className="w-full sm:w-md h-full min-h-[500px] py-4 px-6 flex flex-col gap-2 border-border border-1 rounded-2xl shadow-2xl">
       <div className="text-center">
         <h1 className="text-2xl font-bold tracking-tight">
           Profile Details
@@ -148,7 +150,7 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
                         ? (<CircleX color="red" className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2" />)
                         : (field.value && <CircleCheckBig color="green" className="absolute h-4 w-4 right-3 top-1/2 -translate-y-1/2" />)
                     }
-                    <Input type="username" placeholder="" value = {field.value} onChange={handleUsernameChange} className="pr-9"/>
+                    <Input type="username" disabled={mode === "edit"} placeholder="" value = {field.value} onChange={handleUsernameChange} className="pr-9"/>
                   </div>
                 </FormControl>
                 <FormMessage />

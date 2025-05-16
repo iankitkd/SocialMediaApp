@@ -18,7 +18,7 @@ export default function Error({
   }, [error])
  
   return (
-    <div className='h-screen flex flex-col items-center justify-center gap-2'>
+    <div className='min-h-dvh flex flex-col items-center justify-center gap-2 p-2'>
       <AlertTriangle className="w-14 h-14 animate-pulse text-destructive" />
       <h2 className='text-lg font-semibold'>Something went wrong!</h2>
       <p className='text-muted-foreground text-sm mb-4'>{error.message || "We'll get this fixed soon."}</p>
