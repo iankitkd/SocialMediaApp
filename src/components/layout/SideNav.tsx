@@ -27,7 +27,7 @@ export default function SideNav() {
 
 function SideNavContent() {
   const pathname = usePathname();
-  const { username, name, photoUrl } = useUserStore();
+  const { username, name, avatar } = useUserStore();
 
   const navItems = useMemo(() => {
     return sideNavItems.map(item => {
@@ -80,7 +80,7 @@ function SideNavContent() {
             <div className="mb-2 p-1 lg:px-2 rounded-full hover:bg-accent transition-colors">
               <div className="flex items-center gap-3">
                 <Avatar className="w-12 h-12">
-                  <AvatarImage src={photoUrl || undefined} />
+                  <AvatarImage src={avatar || undefined} />
                   <AvatarFallback>{getInitials(name || "")}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 hidden lg:flex flex-col items-start">
