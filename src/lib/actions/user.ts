@@ -76,6 +76,7 @@ export async function updateUser(data: ProfileValues) {
     if(!res.ok) {
       throw new Error(response.message || "Update Failed");
     }
+    return response.data;
   } catch (error:any) {
       throw new Error(error.message || 'Something went wrong');;
   }

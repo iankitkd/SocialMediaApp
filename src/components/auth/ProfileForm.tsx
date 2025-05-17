@@ -28,11 +28,13 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
   const {username} = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  const setUser = useUserStore((state) => state.setUser)
   
   const form = useForm<ProfileValues>({
       resolver: zodResolver(profileSchema),
       defaultValues: initialData 
-        ? {...initialData, birthDate: new Date(initialData.birthDate || "")} 
+        ? {...initialData, birthDate: (initialData.birthDate ? new Date(initialData.birthDate) : undefined)} 
         : {
           name: undefined,
           username: "",
@@ -40,6 +42,7 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
           gender: undefined,
           birthDate: undefined,
           photoUrl: "",
+          location: undefined,
           isOnboarded: true,
         }
   })
@@ -48,7 +51,8 @@ export default function ProfileForm({ mode, initialData }: ProfileFormProps) {
     setIsLoading(true);
 
     try {
-      await updateUser(values);
+      const user = await updateUser(values);
+      setUser(user);
       
       if(mode === "edit") {
         toast.success('Account updated successfully');

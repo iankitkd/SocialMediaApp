@@ -14,8 +14,11 @@ export default function UserStoreInitializer() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const user = await getCurrentUser();                
+                const user = await getCurrentUser();   
                 if (user) {
+                    if(!user.isOnboarded) {
+                        router.push('/onboarding');
+                    }             
                     setUser(user)
                 } else {
                     clearUser()
