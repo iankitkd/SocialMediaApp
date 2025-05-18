@@ -10,9 +10,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { getInitials } from "@/utils/getInitials";
 import { useUserStore } from "@/lib/store/userStore";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { createPost } from "@/lib/actions/post";
 
 export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
   const {name, avatar} = useUserStore();
@@ -31,12 +32,12 @@ export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
     
     setIsUploading(true);  
     try {
-      // await createPost(content);
+      await createPost(content);
       setContent("");
       router.push("/home");
     } catch (error:any) {
       console.error("Error creating post:", error);
-      toast.error(error.message || "Errro creating post");
+      toast.error(error.message || "Error creating post");
     } finally {
       setIsUploading(false);
     }
@@ -56,7 +57,7 @@ export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
       
           <div className="w-full pl-12">
             <Textarea
-              className="min-h-[100px] max-h-[calc(100vh-100px)] text-lg md:text-xl p-1 border-0 focus-visible:ring-0 resize-none bg-background dark:bg-background overflow-y-scroll"
+              className="min-h-[100px] max-h-[calc(100vh-100px)] text-lg md:text-xl p-1 border-0 focus-visible:ring-0 resize-none bg-background dark:bg-background overflow-y-scroll shadow-none"
               placeholder="What's happening?"
               value={content}
               onChange={(e) => setContent(e.target.value)}
