@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useUserStore } from './userStore'
 import { getCurrentUser } from '../actions/user';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function UserStoreInitializer() {
     const router = useRouter();
@@ -25,7 +26,7 @@ export default function UserStoreInitializer() {
                 }
             } catch (error) {
                 clearUser()
-                router.push('/error');
+                toast.error(error instanceof Error ? error.message : "Something went wrong");
             }
         }
         fetchUser();
