@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 
 import { getUserByUsername } from "@/lib/actions/user";
 import { reservedUsernames } from "@/data/reservedUsernames";
-import ProfileCard from "@/components/card/ProfileCard";
 import { formatDate } from "date-fns";
-
-import IconLinkButton from "@/components/shared/IconLinkButton";
 import { Feather } from "lucide-react";
+import IconLinkButton from "@/components/shared/IconLinkButton";
+
+import ProfileCard from "@/components/card/ProfileCard";
+import PostDisplay from "@/components/post/PostDisplay";
 
 type Params = Promise<{ username: string }>
 
@@ -18,7 +19,7 @@ export default async function page(props: {params: Params}) {
     return notFound();
   }
   
-  const user = await getUserByUsername(username);
+  const {user, posts, pagination} = await getUserByUsername(username);
   if (!user) {
     return notFound();
   }
@@ -31,6 +32,9 @@ export default async function page(props: {params: Params}) {
   return (
     <div className="w-screen md:w-[600px] border-r">
       <ProfileCard user={modifiedUser} />
+
+      <PostDisplay initialPosts={posts} initialPagination={pagination} currentUsername={username} />
+
       <div className="md:hidden absolute bottom-18 right-6">
         <IconLinkButton href="/compose/post" Icon={Feather} />
       </div>

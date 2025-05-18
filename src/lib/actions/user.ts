@@ -17,7 +17,7 @@ export async function getCurrentUser() {
 
 export async function getUserByUsername(username: string) {
   try {
-    const res = await apiClientAction(`${BACKEND_URL}/user/${username}`, "GET", {}, false);
+    const res = await apiClientAction(`${BACKEND_URL}/users/${username}`, "GET", {}, false);
     if(!res.ok) {
       if (res.status === 404) {
         return null;
@@ -37,7 +37,7 @@ export async function getUserByUsername(username: string) {
 
 export async function updateUser(data: ProfileValues) {
   try {
-    const response = await apiClientAction(`${BACKEND_URL}/profile/update`, "POST", {
+    const response = await apiClientAction(`${BACKEND_URL}/profile`, "PATCH", {
         data: data,
     });
     return response.data;
