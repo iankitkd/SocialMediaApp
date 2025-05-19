@@ -16,7 +16,7 @@ import { useUserStore } from "@/lib/store/userStore";
 import { createPost } from "@/lib/actions/post";
 
 export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
-  const {name, avatar} = useUserStore();
+  const {username, name, avatar} = useUserStore();
 
   const [content, setContent] = useState("");
   const [isUploading, setIsUploading] = useState(false);   
@@ -24,6 +24,7 @@ export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
   const router = useRouter();
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
+  if(!username) return null;
   if(!isDesktop && forHomePage) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {

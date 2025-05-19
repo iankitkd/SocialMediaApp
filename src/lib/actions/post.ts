@@ -30,7 +30,6 @@ export async function getUserPosts(username:string, page=1, limit=10): Promise<{
         const response = await apiClientAction(`${BACKEND_URL}/users/${username}/posts?page=${page}&limit=${limit}`, "GET");
         const posts = response.data.posts;
         const pagination = response.data.pagination;
-        console.log(posts, pagination, "post")
         return {posts, pagination};
     } catch (error:any) {
         throw new Error(error.message || "Something went wrong");

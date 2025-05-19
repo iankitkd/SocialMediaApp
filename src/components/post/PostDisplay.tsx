@@ -32,7 +32,11 @@ export default function PostDisplay({initialPosts, initialPagination, username}:
           loadMorePosts();
         }
       },
-      { threshold: 1.0 }
+      { 
+        threshold: 0.1,
+        root: null,
+        rootMargin: '0px 0px 100px 0px'
+      }
     );
 
     if (loaderRef.current) {

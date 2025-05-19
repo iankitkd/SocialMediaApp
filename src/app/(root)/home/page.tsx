@@ -14,7 +14,7 @@ export default async function page() {
 
       <div className="flex-1 hidden lg:block"></div>
 
-      <div className="md:hidden absolute bottom-18 right-6">
+      <div className="md:hidden fixed bottom-20 right-6 z-50">
         <IconLinkButton href="/compose/post" Icon={Feather} />
       </div>
     </>

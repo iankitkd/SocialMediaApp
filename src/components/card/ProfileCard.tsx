@@ -25,8 +25,8 @@ interface ProfileDetailsProps {
 
 export default function ProfileCard({ user }: ProfileDetailsProps) {
   return (
-    <Card className="w-full border-none rounded-lg bg-background">
-      <CardContent className="p-6">
+    <Card className="w-full p-1 border-none rounded-lg bg-background">
+      <CardContent className="px-6 py-2">
         {/* Profile Header */}
         <div className="flex justify-between items-end">
           <Avatar className="h-20 w-20">

@@ -83,7 +83,7 @@ export default function PostCard({
           
         {isOwner && (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger className="outline-0" asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                 <Ellipsis className="h-4 w-4" />
               </Button>
@@ -101,7 +101,7 @@ export default function PostCard({
         )}
       </CardHeader>
       
-      <CardContent className="pb-3 px-0 -translate-y-2">
+      <CardContent className="pb-3 px-0 -translate-y-[6px]">
         <p className="whitespace-pre-line text-foreground"
             onClick={() => router.push(postUrl)}
         >
@@ -109,7 +109,7 @@ export default function PostCard({
         </p>
       </CardContent>
       
-      <CardFooter className="flex justify-between w-full text-muted-foreground pt-0 pb-1 px-0">
+      <CardFooter className="flex justify-between w-full max-w-sm text-muted-foreground pt-0 pb-1 pl-0 pr-2">
         {/* Like button */}
         <Button 
           variant="ghost" 
@@ -140,7 +140,7 @@ export default function PostCard({
 
         {/* Share button */}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger className="outline-0" asChild>
             <Button 
               variant="ghost" 
               size="sm" 
