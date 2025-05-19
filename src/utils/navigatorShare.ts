@@ -2,11 +2,7 @@ import { toast } from "sonner";
 
 export const handleShare = async (postUrl:string) => {
     if (navigator.share) {
-      try {
-        await navigator.share({url: postUrl});
-      } catch (error) {
-        toast.error("Error sharing content");
-      }
+      await navigator.share({url: postUrl});
     } else {
       toast.error("Share not supported on this browser");
     }

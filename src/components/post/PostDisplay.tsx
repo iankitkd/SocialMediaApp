@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from 'react'
 import PostCard from './PostCard'
 
-import { Pagination, Post } from '@/lib/types/post';
 import { LoaderCircle } from 'lucide-react';
+import { Pagination, Post } from '@/lib/types/post';
+
+import { useUserStore } from '@/lib/store/userStore';
 import { getUserPosts } from '@/lib/actions/post';
 
 interface PostDisplayProps {
     initialPosts: Post[];
     initialPagination: Pagination, 
-    currentUsername: string;
+    username: string;
 }
 
-export default function PostDisplay({initialPosts, initialPagination, currentUsername}: PostDisplayProps) {
+export default function PostDisplay({initialPosts, initialPagination, username}: PostDisplayProps) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -21,7 +23,8 @@ export default function PostDisplay({initialPosts, initialPagination, currentUse
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-    
+  const {username: currentUsername } = useUserStore();
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -52,7 +55,7 @@ export default function PostDisplay({initialPosts, initialPagination, currentUse
     try {
       const nextPage = pagination.page + 1;
 
-      const { posts: newPosts, pagination: newPagination } = await getUserPosts(currentUsername, nextPage, pagination.limit);
+      const { posts: newPosts, pagination: newPagination } = await getUserPosts(username, nextPage, pagination.limit);
 
       setPosts((prev) => [...prev, ...newPosts]);
       setPagination(newPagination);

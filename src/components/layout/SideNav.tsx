@@ -32,7 +32,7 @@ function SideNavContent() {
   const navItems = useMemo(() => {
     return sideNavItems.map(item => {
       if (item.name === "Profile") {
-        return { ...item, href: `/${username}` }
+        return { ...item, href: (username ? `/${username}`: '/login') }
       }
       return item;
     })

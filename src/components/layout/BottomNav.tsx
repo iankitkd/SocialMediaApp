@@ -22,7 +22,7 @@ function BottomNavContent() {
   const navItems = useMemo(() => {
       return bottomNavItems.map(item => {
         if (item.name === "Profile") {
-          return { ...item, href: `/${username}` }
+          return { ...item, href: (username ? `/${username}` : '/login') }
         }
         return item;
       })

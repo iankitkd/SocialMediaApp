@@ -33,7 +33,7 @@ export default async function page(props: {params: Params}) {
     <div className="w-screen md:w-[600px] border-r">
       <ProfileCard user={modifiedUser} />
 
-      <PostDisplay initialPosts={posts} initialPagination={pagination} currentUsername={username} />
+      <PostDisplay initialPosts={posts} initialPagination={pagination} username={username} />
 
       <div className="md:hidden absolute bottom-18 right-6">
         <IconLinkButton href="/compose/post" Icon={Feather} />

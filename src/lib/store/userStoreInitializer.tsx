@@ -17,12 +17,13 @@ export default function UserStoreInitializer() {
             try {
                 const user = await getCurrentUser();   
                 if (user) {
+                    setUser(user)
                     if(!user.isOnboarded) {
                         router.push('/onboarding');
                     }             
-                    setUser(user)
                 } else {
-                    clearUser()
+                    setUser({username: "", name: "Guest User", avatar: ""});
+                    // clearUser()
                 }
             } catch (error) {
                 clearUser()
