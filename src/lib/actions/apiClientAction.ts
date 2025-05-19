@@ -18,7 +18,7 @@ export default async function apiClientAction(
     method: method,
     headers: {
       'Content-Type': 'application/json',
-      Cookie: `token=${token}`,
+      Cookie: (token ? `token=${token}` : ""),
       ...options?.headers
     },
     body: options?.data ? JSON.stringify(options.data) : options?.body,

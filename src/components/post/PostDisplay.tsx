@@ -7,15 +7,16 @@ import { LoaderCircle } from 'lucide-react';
 import { Pagination, Post } from '@/lib/types/post';
 
 import { useUserStore } from '@/lib/store/userStore';
-import { getUserPosts } from '@/lib/actions/post';
+import { getLatestPosts, getUserPosts } from '@/lib/actions/post';
 
 interface PostDisplayProps {
     initialPosts: Post[];
-    initialPagination: Pagination, 
-    username: string;
+    initialPagination: Pagination;
+    mode: "latest" | "user";
+    username?: string;
 }
 
-export default function PostDisplay({initialPosts, initialPagination, username}: PostDisplayProps) {
+export default function PostDisplay({initialPosts, initialPagination, mode, username}: PostDisplayProps) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -59,10 +60,20 @@ export default function PostDisplay({initialPosts, initialPagination, username}:
     try {
       const nextPage = pagination.page + 1;
 
-      const { posts: newPosts, pagination: newPagination } = await getUserPosts(username, nextPage, pagination.limit);
+      let fetchPosts;
 
-      setPosts((prev) => [...prev, ...newPosts]);
-      setPagination(newPagination);
+      if (mode === "latest") {
+        fetchPosts = () => getLatestPosts(nextPage, pagination.limit);
+      } else if (mode === "user" && username) {
+        fetchPosts = () => getUserPosts(username, nextPage, pagination.limit);
+      }
+
+      if (fetchPosts) {
+        const { posts: newPosts, pagination: newPagination } = await fetchPosts();
+        setPosts((prev) => [...prev, ...newPosts]);
+        setPagination(newPagination);
+      }
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load posts');
     } finally {

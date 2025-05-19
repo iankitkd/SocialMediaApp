@@ -1,8 +1,13 @@
 import CreatePost from "@/components/post/CreatePost";
+import PostDisplay from "@/components/post/PostDisplay";
 import IconLinkButton from "@/components/shared/IconLinkButton";
 import { Feather } from "lucide-react";
 
+import { getLatestPosts } from "@/lib/actions/post";
+
 export default async function page() {
+
+  const {posts, pagination} = await getLatestPosts();
 
   return (
     <>
@@ -10,6 +15,8 @@ export default async function page() {
         <div className="hidden md:block min-h-[158px]">
           <CreatePost forHomePage={true} />
         </div>
+
+        <PostDisplay initialPosts={posts} initialPagination={pagination} mode="latest" />
       </div>
 
       <div className="flex-1 hidden lg:block"></div>

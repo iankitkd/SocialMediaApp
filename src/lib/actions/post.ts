@@ -24,6 +24,16 @@ export async function deletePost(postId:string) {
     }
 }
 
+export async function getLatestPosts(page=1, limit=10): Promise<{ posts: Post[], pagination: Pagination }> {
+    try {
+        const response = await apiClientAction(`${BACKEND_URL}/posts?page=${page}&limit=${limit}`, "GET");
+        const posts = response.data.posts;
+        const pagination = response.data.pagination;
+        return {posts, pagination};
+    } catch (error:any) {
+        throw new Error(error.message || "Something went wrong");
+    }
+}
 
 export async function getUserPosts(username:string, page=1, limit=10): Promise<{ posts: Post[], pagination: Pagination }> {
     try {
