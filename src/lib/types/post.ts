@@ -7,9 +7,10 @@ export interface Post {
     username: string;
   };
   createdAt: Date;
-  likes: number;
-  comments: number;
+  likesCount: number;
+  commentsCount: number;
   isLiked: boolean;
+  isOwner: boolean;
 }
 
 export interface Pagination {

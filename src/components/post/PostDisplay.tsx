@@ -6,13 +6,13 @@ import PostCard from './PostCard'
 import { LoaderCircle } from 'lucide-react';
 import { Pagination, Post } from '@/lib/types/post';
 
-import { useUserStore } from '@/lib/store/userStore';
-import { getLatestPosts, getUserPosts } from '@/lib/actions/post';
+import { deletePost, getLatestPosts, getUserPosts } from '@/lib/actions/post';
+import { getLikedPosts } from '@/lib/actions/like';
 
 interface PostDisplayProps {
     initialPosts: Post[];
     initialPagination: Pagination;
-    mode: "latest" | "user";
+    mode: "latest" | "user" | "like";
     username?: string;
 }
 
@@ -23,8 +23,6 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
   const [pagination, setPagination] = useState<Pagination>(initialPagination);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const {username: currentUsername } = useUserStore();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -66,6 +64,8 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
         fetchPosts = () => getLatestPosts(nextPage, pagination.limit);
       } else if (mode === "user" && username) {
         fetchPosts = () => getUserPosts(username, nextPage, pagination.limit);
+      } else if (mode === "like") {
+        fetchPosts = () => getLikedPosts(nextPage, pagination.limit);
       }
 
       if (fetchPosts) {
@@ -81,11 +81,22 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
     }
   };
 
+
+  const onDelete = async (postId:string) => {
+    try {
+      await deletePost(postId);
+      const newPosts = posts.filter((post) => post._id !== postId);
+      setPosts(newPosts);
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Error while deleting post")
+    }
+  }
+
   return (
     <>
       <div>
         {posts.map((post) => (
-          <PostCard key={post._id} post={post} isOwner={post.author.username === currentUsername} />
+          <PostCard key={post._id} post={post} onDelete={onDelete} />
         ))}
       </div>
 

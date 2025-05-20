@@ -9,27 +9,28 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu";
 import { Heart, MessageCircle, Share2, Ellipsis, Link2, Share } from "lucide-react";
+import { toast } from "sonner";
 
 import { formatPostDate } from "@/utils/formatPostDate";
 import { getInitials } from "@/utils/getInitials";
 import { handleCopyLink, handleShare } from "@/utils/navigatorShare";
 import { Post } from "@/lib/types/post";
-import { deletePost } from "@/lib/actions/post";
-import { toast } from "sonner";
+
+import { likePost, unlikePost } from "@/lib/actions/like";
 
 interface PostCardProps {
   post: Post;
-  isOwner?: boolean;
+  onDelete?: (postId: string) =>  Promise<void>;
 }
 
 export default function PostCard({ 
   post,
-  isOwner = false 
+  onDelete,
 }: PostCardProps) {
   
   const postUrl = `${post.author.username}/status/${post._id}`
   const [isLiked, setIsLiked] = useState(post.isLiked);
-  const [likeCount, setLikeCount] = useState(post.likes);
+  const [likeCount, setLikeCount] = useState(post.likesCount);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const router = useRouter();
@@ -37,7 +38,11 @@ export default function PostCard({
   const handleLike = async () => {
     setIsProcessing(true);
     try {
-      // await onLike(post._id);
+      if(isLiked) {
+        await unlikePost(post._id);
+      } else {
+        await likePost(post._id);
+      }
       setIsLiked(!isLiked);
       setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
     } catch (error) {
@@ -49,11 +54,11 @@ export default function PostCard({
   };
 
   const handleDelete = async () => {
-    if (!isOwner) return;
+    if (!post.isOwner || !onDelete) return;
     
     setIsProcessing(true);
     try {
-      await deletePost(post._id);
+      await onDelete(post._id);
       toast.success("Post deleted")
     } catch (error) {
       toast.error("Error deleting post");
@@ -81,7 +86,7 @@ export default function PostCard({
           </p>
         </div>
           
-        {isOwner && (
+        {post.isOwner && (
           <DropdownMenu>
             <DropdownMenuTrigger className="outline-0" asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -135,7 +140,7 @@ export default function PostCard({
           className="flex items-center gap-1 hover:text-green-500 dark:hover:text-green-500"
         >
           <MessageCircle className="h-5 w-5" />
-          <span>{post.comments}</span>
+          <span>{post.commentsCount}</span>
         </Button>
 
         {/* Share button */}
