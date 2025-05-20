@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import CreatePost from "@/components/post/CreatePost";
 import PostDisplay from "@/components/post/PostDisplay";
 import IconLinkButton from "@/components/shared/IconLinkButton";
