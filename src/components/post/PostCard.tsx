@@ -17,6 +17,7 @@ import { handleCopyLink, handleShare } from "@/utils/navigatorShare";
 import { Post } from "@/lib/types/post";
 
 import { likePost, unlikePost } from "@/lib/actions/like";
+import { useUserStore } from "@/lib/store/userStore";
 
 interface PostCardProps {
   post: Post;
@@ -35,7 +36,13 @@ export default function PostCard({
 
   const router = useRouter();
 
+  const {username: currentUsername} = useUserStore();
+
   const handleLike = async () => {
+    if(!currentUsername) {
+      return toast.error("Sign in to continue.")
+    }
+
     setIsProcessing(true);
     try {
       if(isLiked) {

@@ -14,7 +14,7 @@ export default async function page(props: {params: Params}) {
   
   if(slug === "likes") {
     const currentUser = await getCurrentUser();
-    if(currentUser.username !== username) {
+    if(!currentUser || currentUser.username !== username) {
       return notFound();
     }
     const {posts, pagination } = await getLikedPosts();

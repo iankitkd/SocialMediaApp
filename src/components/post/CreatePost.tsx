@@ -17,15 +17,35 @@ import { createPost } from "@/lib/actions/post";
 
 export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
   const {username, name, avatar} = useUserStore();
-
-  const [content, setContent] = useState("");
-  const [isUploading, setIsUploading] = useState(false);   
-
-  const router = useRouter();
+  
   const isDesktop = useMediaQuery('(min-width: 768px)');
-
+  
   if(!username) return null;
   if(!isDesktop && forHomePage) return null;
+  
+  if(forHomePage) {
+    return (
+      <div className="hidden md:block min-h-[158px]">
+        <CreatePostCard isDesktop={isDesktop} forHomePage={forHomePage} />
+      </div>
+    )
+  }
+  
+  return <CreatePostCard isDesktop={isDesktop} forHomePage={forHomePage} />
+}
+
+interface CreatePostCardProps {
+  isDesktop: boolean;
+  forHomePage: boolean;
+}
+
+function CreatePostCard({isDesktop, forHomePage}: CreatePostCardProps) {
+  const {name, avatar} = useUserStore();
+
+  const router = useRouter();
+
+  const [content, setContent] = useState("");
+  const [isUploading, setIsUploading] = useState(false);  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

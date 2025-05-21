@@ -25,11 +25,12 @@ export default async function Layout({
     return notFound();
   }
   
-  const { user } = await getUserByUsername(username);
-  if (!user) {
+  const res = await getUserByUsername(username);
+  if (!res) {
     return notFound();
   }
-
+  
+  const user = res.user;
   const modifiedUser = {
     ...user,
     joinDate: formatDate(new Date(user.createdAt), 'MMM yyyy'),
