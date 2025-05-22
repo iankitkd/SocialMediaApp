@@ -12,6 +12,7 @@ export default async function page(props: {params: Params}) {
   const params = await props.params
   const { username, slug } = params;
   
+  
   if(slug === "likes") {
     const currentUser = await getCurrentUser();
     if(!currentUser || currentUser.username !== username) {

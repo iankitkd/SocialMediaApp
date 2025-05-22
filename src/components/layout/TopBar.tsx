@@ -1,15 +1,24 @@
 "use client"
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+
 import { EllipsisVertical, Hash, LogOut } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { cn } from '@/lib/utils'
+import { reservedUsernames } from '@/data/reservedUsernames'
 
 export default function TopBar() {
+  const pathname = usePathname();
+
   const isDesktop = useMediaQuery('(min-width: 768px)')
   if (isDesktop) return null
+  
+  const path = pathname.split('/')[1];
+  if(!reservedUsernames.includes(path)) return null;
+
   return <TopBarContent />
 }
 

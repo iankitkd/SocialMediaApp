@@ -5,10 +5,10 @@ import { Post, Pagination } from "../types/post";
 
 const BACKEND_URL = process.env.BACKEND_API_URL;
 
-export async function createPost (content:string) {
+export async function createPost (content:string, parentPostId?:string) {
     try {
         const data = await apiClientAction(`${BACKEND_URL}/posts`, "POST", {
-            data: {content},
+            data: {content, parentPostId},
         })
         // return data; 
     } catch (error:any) {
@@ -43,5 +43,14 @@ export async function getUserPosts(username:string, page=1, limit=10): Promise<{
         return {posts, pagination};
     } catch (error:any) {
         throw new Error(error.message || "Something went wrong");
+    }
+}
+
+export async function getPostDetails(postId: string): Promise<Post> {
+    try {
+        const response = await apiClientAction(`${BACKEND_URL}/posts/${postId}`, "GET");
+        return response.data;
+    } catch (error) {
+        throw error;
     }
 }

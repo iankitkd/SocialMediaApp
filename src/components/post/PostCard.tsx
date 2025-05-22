@@ -60,6 +60,13 @@ export default function PostCard({
     }
   };
 
+  const handleReply = () => {
+    if(!currentUsername) {
+      return toast.error("Sign in to continue.")
+    }
+    router.push(`/${postUrl}?reply=true`);
+  }
+
   const handleDelete = async () => {
     if (!post.isOwner || !onDelete) return;
     
@@ -115,7 +122,7 @@ export default function PostCard({
       
       <CardContent className="pb-3 px-0 -translate-y-[6px]">
         <p className="whitespace-pre-line text-foreground"
-            onClick={() => router.push(postUrl)}
+            onClick={() => router.push(`/${postUrl}`)}
         >
           {post.content}
         </p>
@@ -142,7 +149,7 @@ export default function PostCard({
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={() => router.push(postUrl)}
+          onClick={handleReply}
           disabled={isProcessing}
           className="flex items-center gap-1 hover:text-green-500 dark:hover:text-green-500"
         >

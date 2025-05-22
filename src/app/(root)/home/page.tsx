@@ -13,8 +13,8 @@ export default async function page() {
 
   return (
     <>
-      <div className="w-screen md:w-[600px] min-h-screen border-r">
-        <CreatePost forHomePage={true} />
+      <div className="w-screen md:w-[600px] min-h-screen border-r pt-10 md:pt-0">
+        <CreatePost mode={"home"} focus={false} />
         
         <PostDisplay initialPosts={posts} initialPagination={pagination} mode="latest" />
       </div>

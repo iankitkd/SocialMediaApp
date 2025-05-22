@@ -15,49 +15,61 @@ import { getInitials } from "@/utils/getInitials";
 import { useUserStore } from "@/lib/store/userStore";
 import { createPost } from "@/lib/actions/post";
 
-export default function CreatePost({forHomePage} : {forHomePage: boolean}) {
+type Mode = "post" | "reply" | "home";
+
+interface CreatePostProps {
+  focus: boolean;
+  mode: Mode;
+  postId?: string
+}
+
+export default function CreatePost({focus, mode, postId} : CreatePostProps) {
   const {username, name, avatar} = useUserStore();
-  
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-  
+    
   if(!username) return null;
-  if(!isDesktop && forHomePage) return null;
   
-  if(forHomePage) {
+  if(mode === "home") {
     return (
       <div className="hidden md:block min-h-[158px]">
-        <CreatePostCard isDesktop={isDesktop} forHomePage={forHomePage} />
+        <CreatePostCard mode={mode} focus={focus} />
       </div>
     )
   }
   
-  return <CreatePostCard isDesktop={isDesktop} forHomePage={forHomePage} />
+  return <CreatePostCard mode={mode} focus={focus} postId={postId} />
 }
 
 interface CreatePostCardProps {
-  isDesktop: boolean;
-  forHomePage: boolean;
+  focus: boolean;
+  mode: Mode;
+  postId?: string;
 }
 
-function CreatePostCard({isDesktop, forHomePage}: CreatePostCardProps) {
+function CreatePostCard({ focus, mode, postId}: CreatePostCardProps) {
   const {name, avatar} = useUserStore();
 
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [isUploading, setIsUploading] = useState(false);  
+  const [isUploading, setIsUploading] = useState(false);
 
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  if(!isDesktop && (mode === "home")) return null;
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim() || content.length > 280) return;
     
     setIsUploading(true);  
     try {
-      await createPost(content);
+      await createPost(content, postId);
       setContent("");
-      router.push("/home");
+      if(mode === "reply") {
+        router.refresh();
+      } else {
+        router.push('/home');
+      }
     } catch (error:any) {
-      console.error("Error creating post:", error);
       toast.error(error.message || "Error creating post");
     } finally {
       setIsUploading(false);
@@ -68,7 +80,7 @@ function CreatePostCard({isDesktop, forHomePage}: CreatePostCardProps) {
     <Card className="p-1 w-full h-full max-h-screen bg-background dark:bg-background rounded-none">
 
       <form onSubmit={handleSubmit}>
-        {(!isDesktop || !forHomePage) && <CreatePostHeader content={content} isUploading={isUploading} router={router} />}
+        {mode === "post" && <CreatePostHeader content={content} isUploading={isUploading} router={router} />}
 
         <CardContent className="relative flex gap-2 items-start justify-start py-1 px-2">
           <Avatar className="h-10 w-10 absolute left-2 top-1">
@@ -79,8 +91,9 @@ function CreatePostCard({isDesktop, forHomePage}: CreatePostCardProps) {
           <div className="w-full pl-12">
             <Textarea
               className="min-h-[100px] max-h-[calc(100vh-100px)] text-lg md:text-xl p-1 border-0 focus-visible:ring-0 resize-none bg-background dark:bg-background overflow-y-scroll shadow-none"
-              placeholder="What's happening?"
+              placeholder={mode === "reply" ? "Post your reply" : "What's happening?"}
               value={content}
+              autoFocus={focus}
               onChange={(e) => setContent(e.target.value)}
             />
             {
@@ -89,7 +102,7 @@ function CreatePostCard({isDesktop, forHomePage}: CreatePostCardProps) {
           </div>
         </CardContent>
         
-        {isDesktop && <CreatePostFooter content={content} isUploading={isUploading} />}
+        {(isDesktop || (mode === "reply")) && <CreatePostFooter content={content} isUploading={isUploading} mode={mode}/>}
       </form>
     </Card>
   );
@@ -125,17 +138,18 @@ function CreatePostHeader({content, isUploading, router}: CreatePostHeaderProps)
 type CreatePostFooterProps = {
   content: string;
   isUploading: boolean;
+  mode: Mode;
 };
 
-function CreatePostFooter({content, isUploading}: CreatePostFooterProps) {
+function CreatePostFooter({content, isUploading, mode}: CreatePostFooterProps) {
   return (
-    <CardFooter className="hidden md:flex justify-end items-center px-1 py-0 border-t [.border-t]:pt-1">
+    <CardFooter className="flex justify-end items-center px-1 py-0 border-t [.border-t]:pt-1">
       <Button
         type="submit"
         className="rounded-full px-8"
         disabled={!content.trim() || (content?.length > 280) || isUploading}
       >
-        {isUploading ? "Posting..." : "Post"}
+        {mode === "reply" ? "Reply" : "Post"}
       </Button>
     </CardFooter>
   )

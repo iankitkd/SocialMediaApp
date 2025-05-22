@@ -8,15 +8,17 @@ import { Pagination, Post } from '@/lib/types/post';
 
 import { deletePost, getLatestPosts, getUserPosts } from '@/lib/actions/post';
 import { getLikedPosts } from '@/lib/actions/like';
+import { getPostReplies } from '@/lib/actions/reply';
 
 interface PostDisplayProps {
     initialPosts: Post[];
     initialPagination: Pagination;
-    mode: "latest" | "user" | "like";
+    mode: "latest" | "user" | "like" | "post-reply";
     username?: string;
+    postId?: string;
 }
 
-export default function PostDisplay({initialPosts, initialPagination, mode, username}: PostDisplayProps) {
+export default function PostDisplay({initialPosts, initialPagination, mode, username, postId}: PostDisplayProps) {
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -66,6 +68,8 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
         fetchPosts = () => getUserPosts(username, nextPage, pagination.limit);
       } else if (mode === "like") {
         fetchPosts = () => getLikedPosts(nextPage, pagination.limit);
+      } else if (mode === "post-reply" && postId) {
+        fetchPosts = () => getPostReplies(postId, nextPage, pagination.limit);
       }
 
       if (fetchPosts) {

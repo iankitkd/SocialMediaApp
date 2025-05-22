@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import ProfileCard from "@/components/card/ProfileCard"
 import IconLinkButton from "@/components/shared/IconLinkButton"
 import ProfilePostsTabs from "@/components/shared/ProfilePostsTabs"
+import TopBackButton from "@/components/shared/TopBackButton"
 
 import { Feather } from "lucide-react"
 import { formatDate } from "date-fns"
@@ -38,6 +39,7 @@ export default async function Layout({
 
   return (
     <div className="w-screen md:w-[600px] border-r">
+      <TopBackButton />
       <ProfileCard user={modifiedUser} />
 
       <ProfilePostsTabs username={username} />

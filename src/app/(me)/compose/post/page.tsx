@@ -4,7 +4,7 @@ export default function page() {
   return (
     <div className='h-screen bg-foreground/50'>
         <div className='h-screen md:h-auto w-screen max-w-2xl mx-auto'>
-            <CreatePost forHomePage={false} />
+            <CreatePost mode={"post"} focus={true} />
         </div>
     </div>
   )
