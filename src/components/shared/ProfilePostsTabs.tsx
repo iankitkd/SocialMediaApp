@@ -20,14 +20,14 @@ export default function ProfilePostsTabs({ username }: { username: string }) {
         Posts
       </Link>
       
-      {/* <Link 
+      <Link 
         href={`/${username}/replies`} 
         className={`${pathname.includes('/replies') 
           ? 'font-semibold underline underline-offset-4 decoration-primary' 
           : 'text-muted-foreground'} p-2`}
       >
         Replies
-      </Link> */}
+      </Link>
 
       {
         username === currentUsername && (

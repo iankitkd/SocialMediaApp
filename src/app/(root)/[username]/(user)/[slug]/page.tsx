@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import PostDisplay from "@/components/post/PostDisplay";
 import { getLikedPosts } from "@/lib/actions/like";
 import { getCurrentUser } from "@/lib/actions/user";
+import { getUserReplies } from "@/lib/actions/reply";
 
 type Params = Promise<{ username: string, slug: string }>
 
@@ -21,6 +22,13 @@ export default async function page(props: {params: Params}) {
     const {posts, pagination } = await getLikedPosts();
     return (
       <PostDisplay initialPosts={posts} initialPagination={pagination} mode={"like"} username={username} />
+    )
+  }
+
+  if(slug === "replies") {
+    const {posts, pagination } = await getUserReplies(username);
+    return (
+      <PostDisplay initialPosts={posts} initialPagination={pagination} mode={"user-reply"} username={username} />
     )
   }
 

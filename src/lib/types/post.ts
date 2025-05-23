@@ -11,6 +11,7 @@ export interface Post {
   commentsCount: number;
   isLiked: boolean;
   isOwner: boolean;
+  parent: Post
 }
 
 export interface Pagination {

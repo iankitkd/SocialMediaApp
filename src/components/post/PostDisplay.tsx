@@ -8,12 +8,12 @@ import { Pagination, Post } from '@/lib/types/post';
 
 import { deletePost, getLatestPosts, getUserPosts } from '@/lib/actions/post';
 import { getLikedPosts } from '@/lib/actions/like';
-import { getPostReplies } from '@/lib/actions/reply';
+import { getPostReplies, getUserReplies } from '@/lib/actions/reply';
 
 interface PostDisplayProps {
     initialPosts: Post[];
     initialPagination: Pagination;
-    mode: "latest" | "user" | "like" | "post-reply";
+    mode: "latest" | "user" | "like" | "post-reply" | "user-reply";
     username?: string;
     postId?: string;
 }
@@ -70,6 +70,8 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
         fetchPosts = () => getLikedPosts(nextPage, pagination.limit);
       } else if (mode === "post-reply" && postId) {
         fetchPosts = () => getPostReplies(postId, nextPage, pagination.limit);
+      } else if (mode === "user-reply" && username) {
+        fetchPosts = () => getUserReplies(username, nextPage, pagination.limit);
       }
 
       if (fetchPosts) {
@@ -99,9 +101,17 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
   return (
     <>
       <div>
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} onDelete={onDelete} />
-        ))}
+        {posts.map((post) => {
+          if(mode === "user-reply") {
+            return (
+              <div key={post._id}>
+                <PostCard key={post.parent._id} post={post.parent} onDelete={onDelete} haveBottomLine={true} />
+                <PostCard key={post._id} post={post} onDelete={onDelete} haveTopLine={true} />
+              </div>
+            )
+          }
+          return <PostCard key={post._id} post={post} onDelete={onDelete} />
+        })}
       </div>
 
       <div ref={loaderRef} className="p-4">

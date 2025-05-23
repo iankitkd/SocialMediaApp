@@ -22,11 +22,15 @@ import { useUserStore } from "@/lib/store/userStore";
 interface PostCardProps {
   post: Post;
   onDelete?: (postId: string) =>  Promise<void>;
+  haveBottomLine?: boolean;
+  haveTopLine?: boolean;
 }
 
 export default function PostCard({ 
   post,
   onDelete,
+  haveBottomLine = false,
+  haveTopLine = false,
 }: PostCardProps) {
   
   const postUrl = `${post.author.username}/status/${post._id}`
@@ -82,14 +86,23 @@ export default function PostCard({
   };
 
   return (
-    <Card className="m-0 py-1 pr-2 pl-14 gap-0 relative shadow-none bg-background dark:bg-background hover:bg-secondary/30 dark:hover:bg-secondary/30 rounded-none">
-      <Link href={`/${post.author.username}`}>
-        <Avatar className="h-10 w-10 absolute top-2 left-2">
-          <AvatarImage src={post.author.avatar} />
-          <AvatarFallback>{getInitials(post.author.name)}</AvatarFallback>
-        </Avatar>
-      </Link>
+    <Card className={`m-0 p-1 flex flex-row gap-1 shadow-none bg-background dark:bg-background hover:bg-secondary/30 dark:hover:bg-secondary/30 rounded-none
+      ${haveBottomLine && "border-b-0"} ${haveTopLine && "border-t-0"} `}
+    >
+      <div className="w-14 flex flex-col items-center">
+        {haveTopLine && <div className="w-[2px] h-2 -translate-y-1 bg-foreground/40 rounded-b-md"></div>}
+
+        <Link href={`/${post.author.username}`}>
+          <Avatar className="h-10 w-10 ">
+            <AvatarImage src={post.author.avatar} />
+            <AvatarFallback>{getInitials(post.author.name)}</AvatarFallback>
+          </Avatar>
+        </Link>
+
+        {haveBottomLine && <div className="w-[2px] h-full translate-y-1 bg-foreground/40 rounded-t-md"></div>}
+      </div>
       
+     <div className="flex-1 flex flex-col">
       <CardHeader className="py-0 px-0 flex justify-between items-start">
         <div className="flex items-center gap-2">
           <Link href={`/${post.author.username}`} className="font-medium text-foreground/90 hover:underline">
@@ -180,7 +193,7 @@ export default function PostCard({
         </DropdownMenu>
         
       </CardFooter>
-     
+     </div>
     </Card>
   );
 }
