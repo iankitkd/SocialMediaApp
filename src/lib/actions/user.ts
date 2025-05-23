@@ -56,3 +56,12 @@ export async function isUsernameAvailable(username:string) {
     throw new Error(error.message || 'Something went wrong');
   }
 }
+
+export async function searchUsers(searchString:string) {
+  try {
+    const res = await apiClientAction(`${BACKEND_URL}/users/search?q=${searchString}`, "GET");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

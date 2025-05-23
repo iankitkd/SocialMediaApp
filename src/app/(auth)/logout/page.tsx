@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { toast } from 'sonner';
-import ConfirmationCard from '@/components/card/ConfirmationCard'
+import ConfirmationCard from '@/components/shared/ConfirmationCard'
 import apiClient from '@/lib/apiClient';
 import { useUserStore } from '@/lib/store/userStore';
 

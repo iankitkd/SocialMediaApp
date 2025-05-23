@@ -29,7 +29,7 @@ export default async function page(props: {
   const {posts: replies, pagination} = await getPostReplies(postId);
 
   return (
-    <div className="w-screen md:w-[600px] min-h-screen border-r">
+    <div className="w-screen md:w-[600px] border-r">
       <TopBackButton />
       <PostCard post={post} />
       <ReplyPostSection postId={postId} reply={!!reply} />

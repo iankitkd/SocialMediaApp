@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 
-import ProfileCard from "@/components/card/ProfileCard"
+import ProfileCard from "@/components/user/ProfileCard"
 import IconLinkButton from "@/components/shared/IconLinkButton"
 import ProfilePostsTabs from "@/components/shared/ProfilePostsTabs"
 import TopBackButton from "@/components/shared/TopBackButton"
