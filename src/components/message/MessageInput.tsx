@@ -1,20 +1,26 @@
 import { useRef, useState } from 'react'
 
 import { Send } from 'lucide-react'
+import { useUserStore } from '@/lib/store/userStore';
+import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
+import { MySocket } from '@/lib/types/socket';
 
-export default function MessageInput() {
+export default function MessageInput({socket}: {socket: MySocket}) {
     const [newMessage, setNewMessage] = useState("");
     const [sendMessageLoading, setSendMessageLoading] = useState(false);
 
+    const { _id: receiverId } = useSelectedUserStore();
+    const { _id: senderId } = useUserStore();
+
     const handleSendMessage = () => {
-      if(!newMessage.trim()) return;
+      if(!newMessage.trim() || !socket) return;
 
       setSendMessageLoading(true);
       try {
-        
+        socket.emit('sendMessage', { content: newMessage, senderId, receiverId });
         setNewMessage("");
       } catch (error) {
-        
+
       } finally {
         setSendMessageLoading(false);
       }

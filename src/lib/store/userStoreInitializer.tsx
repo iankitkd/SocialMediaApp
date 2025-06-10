@@ -22,7 +22,7 @@ export default function UserStoreInitializer() {
                         router.push('/onboarding');
                     }             
                 } else {
-                    setUser({username: "", name: "Guest User", avatar: ""});
+                    setUser({_id: "", username: "", name: "Guest User", avatar: ""});
                     // clearUser()
                 }
             } catch (error) {

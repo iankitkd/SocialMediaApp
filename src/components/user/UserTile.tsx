@@ -17,7 +17,7 @@ export function UserTile({ user }: UserTileProps) {
         
         <div>
           <h3 className="leading-none text-lg font-medium hover:underline">{user.name}</h3>
-          <p className="text-muted-foreground">@{user.username}</p>
+          <p className="text-left text-muted-foreground">@{user.username}</p>
         </div>
       </div>
   );

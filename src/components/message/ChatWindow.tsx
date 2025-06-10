@@ -6,9 +6,10 @@ import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import MessageHeader from './MessageHeader';
 import MessagesView from './MessagesView';
 import MessageInput from './MessageInput';
+import { MySocket } from '@/lib/types/socket';
 
 
-export default function ChatWindow() {
+export default function ChatWindow({socket} : {socket: MySocket}) {
   const { _id } = useSelectedUserStore();
   const clearUser = useSelectedUserStore.getState().clearUser;
 
@@ -47,8 +48,8 @@ export default function ChatWindow() {
   return (
     <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 z-50 bg-background border-r`}>
       <MessageHeader onClose={closeChatWindow}/>
-      <MessagesView />
-      <MessageInput />
+      <MessagesView socket={socket}/>
+      <MessageInput socket={socket} />
     </div>
   )
 }
