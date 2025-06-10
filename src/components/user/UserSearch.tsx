@@ -1,26 +1,31 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { UserTile } from "./UserTile";
 
 import { searchUsers } from "@/lib/actions/user";
 import { debounce } from "@/utils/debounce";
+import { useSelectedUserStore } from "@/lib/store/selectedUserStore";
+import { User } from "@/lib/types/user";
 
-interface User {
-  _id: string;
-  name: string;
-  username: string;
-  avatar?: string;
+
+interface UserSearchProps {
+  mode?: "profile" | "message";
+  handleBackClick?: () => void;
 }
 
-export function UserSearch() {
+export function UserSearch({mode = "profile", handleBackClick}: UserSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const router = useRouter();
+  const setSelectedUser = useSelectedUserStore().setUser;
 
   const fetchUsers = useCallback(
     debounce(async (searchTerm: string) => {
@@ -47,15 +52,26 @@ export function UserSearch() {
 
   return (
     <div className="w-full space-y-4 py-2 px-4">
-      <div className="relative mx-2">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search users by name or username ..."
-          className="w-full pl-9"
-          value={searchTerm}
-          onChange={handleSearchQueryChange}
-        />
+      <div className="flex items-center">
+        { handleBackClick && (
+            <button className='px-3 py-1 text-xl h-full hover:cursor-pointer' 
+              onClick={() => handleBackClick()}
+            >
+              <ArrowLeft />
+            </button>
+        )}
+
+        <div className="relative mx-2 w-full">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search users by name or username ..."
+            className="w-full pl-9"
+            value={searchTerm}
+            autoFocus={mode === "message"}
+            onChange={handleSearchQueryChange}
+          />
+        </div>
       </div>
 
       {isLoading ? (
@@ -64,10 +80,20 @@ export function UserSearch() {
             <Skeleton key={i} className="h-15 w-full rounded-md" />
           ))}
         </div>
+      ) : (users.length > 0 && handleBackClick) ? (
+        <div>
+          {users.map((user) => (
+            <button key={user._id} onClick={() => {setSelectedUser(user); handleBackClick();}} className="w-full">
+              <UserTile user={user} />
+            </button>
+          ))}
+        </div>
       ) : users.length > 0 ? (
         <div>
           {users.map((user) => (
-            <UserTile key={user._id} user={user} />
+            <button key={user._id} onClick={() => router.push(`/${user.username}`)} className="w-full">
+              <UserTile user={user} />
+            </button>
           ))}
         </div>
       ) : searchTerm ? (

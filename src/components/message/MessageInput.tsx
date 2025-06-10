@@ -16,7 +16,7 @@ export default function MessageInput() {
       } catch (error) {
         
       } finally {
-        setSendMessageLoading(true);
+        setSendMessageLoading(false);
       }
     }
 

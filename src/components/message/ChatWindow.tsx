@@ -9,7 +9,7 @@ import MessageInput from './MessageInput';
 
 
 export default function ChatWindow() {
-  const { userId } = useSelectedUserStore();
+  const { _id } = useSelectedUserStore();
   const clearUser = useSelectedUserStore.getState().clearUser;
 
   
@@ -18,35 +18,34 @@ export default function ChatWindow() {
   }
   
   // to go back to chatlist on exit
-  useEffect(() => {
-    window.history.pushState({ chatOpen: true }, '');
+  // useEffect(() => {
+  //   window.history.pushState({ chatOpen: true }, '');
 
-    const handlePopState = (event: PopStateEvent) => {
-      if (event.state && event.state.chatOpen) {
-        closeChatWindow();
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
+  //   const handlePopState = (event: PopStateEvent) => {
+  //     if (event.state && event.state.chatOpen) {
+  //       closeChatWindow();
+  //     }
+  //   };
+  //   window.addEventListener('popstate', handlePopState);
 
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [closeChatWindow]);
+  //   return () => {
+  //     window.removeEventListener('popstate', handlePopState);
+  //   };
+  // }, [closeChatWindow]);
 
 
   // If no chat selected return 
-  if(!userId) {
+  if(!_id) {
     return (
-      <div className='w-screen md:w-[550px] border-r flex flex-col justify-center items-center'>
+      <div className='w-screen lg:w-[550px] border-r hidden lg:flex flex-col justify-center items-center'>
         <p className="text-text-secondary">Select a chat to start messaging</p>
-        {/* new message button */}
       </div>
     )
   }
 
 
   return (
-    <div className='flex flex-col w-screen md:w-[550px] border-r'>
+    <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 z-50 bg-background border-r`}>
       <MessageHeader onClose={closeChatWindow}/>
       <MessagesView />
       <MessageInput />

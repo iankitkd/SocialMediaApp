@@ -17,13 +17,14 @@ export default async function page() {
         <CreatePost mode={"home"} focus={false} />
         
         <PostDisplay initialPosts={posts} initialPagination={pagination} mode="latest" />
+        
+        <div className="md:hidden fixed bottom-20 right-6 z-50">
+          <IconLinkButton href="/compose/post" Icon={Feather} />
+        </div>
       </div>
 
-      <div className="flex-1 hidden lg:block"></div>
+      {/* <div className="flex-1 hidden lg:block"></div> */}
 
-      <div className="md:hidden fixed bottom-20 right-6 z-50">
-        <IconLinkButton href="/compose/post" Icon={Feather} />
-      </div>
     </>
     )
 }

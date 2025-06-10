@@ -5,7 +5,7 @@ import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { Message } from '@/lib/types/message';
 
 export default function MessagesView() {
-  const { userId } = useSelectedUserStore();
+  const { _id } = useSelectedUserStore();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -28,7 +28,7 @@ export default function MessagesView() {
             <MessageContent 
               key={message._id} 
               message={message} 
-              isOwnMessage={message.senderId !== userId}
+              isOwnMessage={message.senderId !== _id}
             />
           )
         })
