@@ -14,19 +14,15 @@ export default function UserStoreInitializer() {
     
     useEffect(() => {
         const fetchUser = async () => {
+            // loading toast while backend initialize
+            let loadingToast: ReturnType<typeof toast.loading> | null = null;
+            const timeout = setTimeout(() => {
+                loadingToast = toast.loading('Starting up the backend — this may take up to a minute.');
+            }, 5000);
+            
             try {
-                let loadingToast: ReturnType<typeof toast.loading> | null = null;
-                const timeout = setTimeout(() => {
-                    loadingToast = toast.loading('Starting up the backend — this may take up to a minute.');
-                }, 5000);
-
                 // get current user
                 const user = await getCurrentUser();  
-                
-                clearTimeout(timeout);
-                if (loadingToast) {
-                    toast.dismiss(loadingToast);
-                }
 
                 if (user) {
                     setUser(user)
@@ -40,6 +36,9 @@ export default function UserStoreInitializer() {
             } catch (error) {
                 clearUser()
                 toast.error(error instanceof Error ? error.message : "Something went wrong");
+            } finally {
+                clearTimeout(timeout);
+                if (loadingToast) toast.dismiss(loadingToast);
             }
         }
         fetchUser();
