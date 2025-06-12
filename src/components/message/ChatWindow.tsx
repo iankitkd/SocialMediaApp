@@ -17,20 +17,20 @@ export default function ChatWindow({socket} : {socket: MySocket}) {
   }
   
   // to go back to chatlist on exit
-  // useEffect(() => {
-  //   window.history.pushState({ chatOpen: true }, '');
+  useEffect(() => {
+    window.history.pushState({ chatOpen: true }, '');
 
-  //   const handlePopState = (event: PopStateEvent) => {
-  //     if (event.state && event.state.chatOpen) {
-  //       closeChatWindow();
-  //     }
-  //   };
-  //   window.addEventListener('popstate', handlePopState);
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.chatOpen) {
+        closeChatWindow();
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
 
-  //   return () => {
-  //     window.removeEventListener('popstate', handlePopState);
-  //   };
-  // }, [closeChatWindow]);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [closeChatWindow]);
 
 
   // If no chat selected return 
@@ -44,7 +44,7 @@ export default function ChatWindow({socket} : {socket: MySocket}) {
 
 
   return (
-    <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 z-40 bg-background border-r`}>
+    <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 h-dvh z-40 bg-background border-r`}>
       <MessageHeader onClose={closeChatWindow}/>
       <MessagesView socket={socket}/>
       <MessageInput socket={socket} />

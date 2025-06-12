@@ -9,7 +9,8 @@ export default function MessageContent({ message, isOwnMessage } : ChatMessagePr
   const formatTime = (timestamp: Date) => {
     return new Date(timestamp).toLocaleTimeString([], { 
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit',
+      hour12: true,
     });
   };
 
@@ -24,7 +25,7 @@ export default function MessageContent({ message, isOwnMessage } : ChatMessagePr
   }
 
   return (
-    <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
+    <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4 animate-fade-in-up`}>
       <div className={`max-w-xs lg:max-w-md px-3 py-2 rounded-lg flex flex-col ${
         isOwnMessage 
           ? 'bg-blue-500 text-white rounded-tr-none' 

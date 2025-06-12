@@ -6,6 +6,7 @@ import { Message } from '@/lib/types/message';
 import { MySocket } from '@/lib/types/socket';
 import { useUserStore } from '@/lib/store/userStore';
 import apiClient from '@/lib/apiClient';
+import MessageSkeleton from './MessageSkeleton';
 
 export default function MessagesView({socket}: {socket: MySocket}) {
   const { _id: receiverId } = useSelectedUserStore();
@@ -21,11 +22,14 @@ export default function MessagesView({socket}: {socket: MySocket}) {
 
     async function setChatHistory() {
       if(receiverId) {
+        setMessagesLoading(true);
         try {
           const {messages} = await apiClient(`/api/messages`, "POST", {data: {receiverId}});
           setMessages(messages);
         } catch (error) {
 
+        } finally {
+          setMessagesLoading(false);
         }
       }
     }
@@ -47,26 +51,51 @@ export default function MessagesView({socket}: {socket: MySocket}) {
 
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   };
   
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  let previousDateStr: string | null = null;
 
   return (
     <div className='flex-1 flex-col py-2 px-4 overflow-y-auto'>
-      {
-        messages.length > 0 && messages.map((message, i) => {
-          return (
-            <MessageContent 
-              key={message._id || i} 
-              message={message} 
-              isOwnMessage={message.senderId === userId}
-            />
-          )
-        })
+      { 
+        messagesLoading ? (
+          <MessageSkeleton />
+        ) : ( messages.length > 0 && messages.map((message, i) => {
+            const currentDateStr = new Date(message.createdAt).toDateString();
+            let displayDate = null;
+            if (!previousDateStr || currentDateStr !== previousDateStr) {
+              displayDate = currentDateStr;
+              previousDateStr = currentDateStr;
+            }
+           
+            return (
+              <>
+              { 
+                displayDate ? (
+                  <div key={message._id} className=''>
+                    <div className='w-fit px-3 py-1 justify-self-center bg-secondary text-secondary-foreground rounded-full'>{displayDate}</div>
+                    <MessageContent 
+                      key={message._id || i} 
+                      message={message} 
+                      isOwnMessage={message.senderId === userId}
+                    />
+                  </div>
+              ) : (
+                  <MessageContent 
+                    key={message._id || i} 
+                    message={message} 
+                    isOwnMessage={message.senderId === userId}
+                  />
+              )}
+              </>
+            )
+          })
+        )
       }
       <div ref={messagesEndRef} />
     </div>
