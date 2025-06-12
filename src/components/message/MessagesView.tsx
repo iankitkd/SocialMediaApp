@@ -65,37 +65,35 @@ export default function MessagesView({socket}: {socket: MySocket}) {
       { 
         messagesLoading ? (
           <MessageSkeleton />
-        ) : ( messages.length > 0 && messages.map((message, i) => {
+        ) : messages.length > 0 && messages.map((message, i) => {
             const currentDateStr = new Date(message.createdAt).toDateString();
             let displayDate = null;
             if (!previousDateStr || currentDateStr !== previousDateStr) {
               displayDate = currentDateStr;
               previousDateStr = currentDateStr;
             }
-           
-            return (
-              <>
-              { 
-                displayDate ? (
-                  <div key={message._id} className=''>
-                    <div className='w-fit px-3 py-1 justify-self-center bg-secondary text-secondary-foreground rounded-full'>{displayDate}</div>
-                    <MessageContent 
-                      key={message._id || i} 
-                      message={message} 
-                      isOwnMessage={message.senderId === userId}
-                    />
-                  </div>
-              ) : (
+              
+            if(displayDate !== null) {
+              return (
+                <div key={message._id}>
+                  <div className='w-fit px-3 py-1 justify-self-center bg-secondary text-secondary-foreground rounded-full'>{displayDate}</div>
                   <MessageContent 
                     key={message._id || i} 
                     message={message} 
                     isOwnMessage={message.senderId === userId}
                   />
-              )}
-              </>
+                </div>
+              )
+            }
+            
+            return (
+              <MessageContent 
+                key={message._id || i} 
+                message={message} 
+                isOwnMessage={message.senderId === userId}
+              />
             )
-          })
-        )
+        })
       }
       <div ref={messagesEndRef} />
     </div>
