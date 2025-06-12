@@ -15,7 +15,19 @@ export default function UserStoreInitializer() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const user = await getCurrentUser();   
+                let loadingToast: ReturnType<typeof toast.loading> | null = null;
+                const timeout = setTimeout(() => {
+                    loadingToast = toast.loading('Starting up the backend — this may take up to a minute.');
+                }, 5000);
+
+                // get current user
+                const user = await getCurrentUser();  
+                
+                clearTimeout(timeout);
+                if (loadingToast) {
+                    toast.dismiss(loadingToast);
+                }
+
                 if (user) {
                     setUser(user)
                     if(!user.isOnboarded) {

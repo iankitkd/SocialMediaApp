@@ -15,12 +15,16 @@ export default async function page() {
     )
   } 
 
-  const conversations = await getConversations();
-  console.log(conversations, "con");
+  let conversations = [];
+  try {
+    conversations = await getConversations();
+  } catch (error) {
+    
+  }
 
   return (
     <div className="w-screen md:w-full h-full pt-10 md:pt-0">
-      <ChatSection />
+      <ChatSection conversations={conversations} />
     </div>
   )
 }
