@@ -1,10 +1,12 @@
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
-import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation';
-import React from 'react'
+
+import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
+import { useUserStore } from '@/lib/store/userStore';
+import { ArrowLeft } from 'lucide-react'
 
 export default function MessageHeader({onClose}: { onClose: ()=>void }) {
   const { username, name } = useSelectedUserStore();
+  const {username: currentUsername} = useUserStore();
   const router = useRouter();
 
   return (
@@ -17,7 +19,7 @@ export default function MessageHeader({onClose}: { onClose: ()=>void }) {
 
       <div className="flex flex-col w-full px-2 py-1 rounded-sm hover:bg-secondary/50" onClick={() => router.push(`/${username}`)}>
         <h3 className="text-xl leading-5 font-medium">{name}</h3>
-        <p className="text-sm text-text-muted">{`@${username}`}</p>
+        <p className="text-sm text-text-muted">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
       </div>
     </div>
   )

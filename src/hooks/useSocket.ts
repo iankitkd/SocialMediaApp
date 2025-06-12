@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 
 export function useSocket() {
   const [socket, setSocket] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
 
   useEffect(() => {
-     const socketIo = io(BACKEND_URL, {
+    const socketIo = io(SOCKET_URL, {
       transports: ['websocket'],
+      withCredentials: true,
     });
 
     setSocket(socketIo);

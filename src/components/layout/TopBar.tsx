@@ -49,7 +49,7 @@ function TopBarContent() {
   }, [lastScrollY]);
 
   return (
-    <div className={cn('fixed top-0 left-0 w-full z-50 bg-background/90 border-b transition-transform duration-300 md:hidden flex items-center justify-center py-2',
+    <div className={cn('fixed top-0 left-0 w-full z-30 bg-background/90 border-b transition-transform duration-300 md:hidden flex items-center justify-center py-2',
       {
         'translate-y-0': show,
         '-translate-y-full': !show,

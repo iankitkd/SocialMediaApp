@@ -32,7 +32,7 @@ export default function MessageContent({ message, isOwnMessage } : ChatMessagePr
         }`}
       >
 
-        <div className="text-sm">{message.content}</div>
+        <div className="text-sm break-words whitespace-pre-wrap">{message.content}</div>
         <div className={`text-xs leading-0 pt-3 pb-1 self-end ${
           isOwnMessage ? 'text-blue-100' : 'text-gray-500'
           }`}

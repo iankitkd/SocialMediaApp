@@ -46,7 +46,7 @@ export default function ChatWindow({socket} : {socket: MySocket}) {
 
 
   return (
-    <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 z-50 bg-background border-r`}>
+    <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 z-40 bg-background border-r`}>
       <MessageHeader onClose={closeChatWindow}/>
       <MessagesView socket={socket}/>
       <MessageInput socket={socket} />

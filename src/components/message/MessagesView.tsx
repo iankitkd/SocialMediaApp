@@ -5,6 +5,7 @@ import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { Message } from '@/lib/types/message';
 import { MySocket } from '@/lib/types/socket';
 import { useUserStore } from '@/lib/store/userStore';
+import apiClient from '@/lib/apiClient';
 
 export default function MessagesView({socket}: {socket: MySocket}) {
   const { _id: receiverId } = useSelectedUserStore();
@@ -18,11 +19,20 @@ export default function MessagesView({socket}: {socket: MySocket}) {
   useEffect(() => {
     const roomId = [userId, receiverId].sort().join('_');
 
+    async function setChatHistory() {
+      if(receiverId) {
+        try {
+          const {messages} = await apiClient(`/api/messages`, "POST", {data: {receiverId}});
+          setMessages(messages);
+        } catch (error) {
+
+        }
+      }
+    }
+
     if (socket) {
       socket.emit('joinRoom', roomId);
-
-      // getChatHistory(roomId);
-
+      setChatHistory();
       socket.on('receiveMessage', (message) => {
         if (message.roomId === roomId) {
           setMessages((prev) => [...prev, message]);
@@ -46,14 +56,14 @@ export default function MessagesView({socket}: {socket: MySocket}) {
 
 
   return (
-    <div className='flex-1 flex-col'>
+    <div className='flex-1 flex-col p-2 overflow-y-auto'>
       {
         messages.length > 0 && messages.map((message, i) => {
           return (
             <MessageContent 
               key={message._id || i} 
               message={message} 
-              isOwnMessage={message.senderId !== receiverId}
+              isOwnMessage={message.senderId === userId}
             />
           )
         })
