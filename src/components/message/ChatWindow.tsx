@@ -12,6 +12,7 @@ import { useSocket } from '@/hooks/useSocket';
 import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Conversation } from '@/lib/types/message';
+import { useModalBackButton } from '@/hooks/useModalBackButton';
 
 
 export default function ChatWindow({conversations}: {conversations: Conversation[]}) {
@@ -26,27 +27,13 @@ export default function ChatWindow({conversations}: {conversations: Conversation
     clearUser();
     router.refresh();
   }
-  
-  // to go back to chatlist on exit
-  useEffect(() => {
-    window.history.pushState({ chatOpen: true }, '');
 
-    const handlePopState = (event: PopStateEvent) => {
-      if (event.state && event.state.chatOpen) {
-        closeChatWindow();
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [closeChatWindow]);
-
+  // to handle back button behavior
+  useModalBackButton(!!receiverId, closeChatWindow);
 
 
   return (
-    <div className="w-full h-full flex">
+    <div className="flex">
       {
         (!receiverId || isDesktop) && (
           <ChatList conversations={conversations} />
@@ -55,13 +42,13 @@ export default function ChatWindow({conversations}: {conversations: Conversation
       
       {
         receiverId ? (
-          <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 h-dvh z-40 bg-background border-r`}>
+          <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 h-dvh z-40 bg-background border-r transition-all duration-300`}>
             <MessageHeader onClose={closeChatWindow}/>
             <MessagesView socket={socket}/>
             <MessageInput socket={socket} />
           </div>
         ) : isDesktop && (
-          <div className='w-screen lg:w-[550px] border-r hidden lg:flex flex-col justify-center items-center'>
+          <div className='w-screen lg:w-[550px] h-screen border-r hidden lg:flex flex-col justify-center items-center'>
             <p className="text-text-secondary">Select a chat to start messaging</p>
           </div>
         )

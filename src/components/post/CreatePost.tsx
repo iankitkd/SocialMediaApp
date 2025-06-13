@@ -25,10 +25,11 @@ interface CreatePostProps {
 
 export default function CreatePost({focus, mode, postId} : CreatePostProps) {
   const {username, name, avatar} = useUserStore();
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
     
   if(!username) return null;
   
-  if(mode === "home") {
+  if(mode === "home" && isDesktop) {
     return (
       <div className="hidden md:block min-h-[158px]">
         <CreatePostCard mode={mode} focus={focus} />

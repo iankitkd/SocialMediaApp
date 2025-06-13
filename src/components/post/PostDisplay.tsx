@@ -99,8 +99,7 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
   }
 
   return (
-    <>
-      <div>
+    <div>
         {posts.map((post) => {
           if(mode === "user-reply") {
             return (
@@ -112,7 +111,6 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
           }
           return <PostCard key={post._id} post={post} onDelete={onDelete} />
         })}
-      </div>
 
       <div ref={loaderRef} className="p-4">
         {loading && <div className='text-center text-primary'><LoaderCircle className='w-full animate-spin' /></div>}
@@ -122,6 +120,7 @@ export default function PostDisplay({initialPosts, initialPagination, mode, user
       {posts.length === 0 && !loading && (
         <div className='w-full text-center text-sm text-muted-foreground'>No posts to display</div>
       )}
-    </>
+
+    </div>
   )
 }
