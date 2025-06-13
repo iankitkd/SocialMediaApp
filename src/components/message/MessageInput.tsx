@@ -36,7 +36,7 @@ export default function MessageInput({socket}: {socket: MySocket}) {
     };
 
   return (
-    <div className='p-2 border-t'>
+    <div className='relative bottom-0 w-full p-2 border-t'>
       <div className='flex rounded-lg px-2 bg-secondary text-bg-foreground'>
         <textarea 
             ref={textareaRef}

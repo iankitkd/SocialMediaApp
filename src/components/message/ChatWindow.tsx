@@ -42,10 +42,12 @@ export default function ChatWindow({conversations}: {conversations: Conversation
       
       {
         receiverId ? (
-          <div className={`flex flex-col w-screen lg:w-[550px] fixed lg:relative inset-0 h-dvh z-40 bg-background border-r transition-all duration-300`}>
-            <MessageHeader onClose={closeChatWindow}/>
-            <MessagesView socket={socket}/>
-            <MessageInput socket={socket} />
+          <div className='lg:relative fixed inset-0 w-screen lg:w-[550px] h-screen z-40 bg-background border-r'>
+            <div className={`flex flex-col h-dvh transition-all duration-300`}>
+              <MessageHeader onClose={closeChatWindow}/>
+              <MessagesView socket={socket}/>
+              <MessageInput socket={socket} />
+            </div>
           </div>
         ) : isDesktop && (
           <div className='w-screen lg:w-[550px] h-screen border-r hidden lg:flex flex-col justify-center items-center'>

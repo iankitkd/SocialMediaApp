@@ -61,7 +61,7 @@ export default function MessagesView({socket}: {socket: MySocket}) {
   let previousDateStr: string | null = null;
 
   return (
-    <div className='flex-1 flex-col py-2 px-4 overflow-y-auto'>
+    <div className='h-[calc(100dvh - 110px)] flex-col py-2 px-4 overflow-y-auto'>
       { 
         messagesLoading ? (
           <MessageSkeleton />
