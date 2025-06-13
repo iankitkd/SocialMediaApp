@@ -10,7 +10,7 @@ interface UserTileProps {
   lastMessage: Message;
 }
 
-export function ChatListTile({ user, lastMessage }: UserTileProps) {
+export default function ChatListTile({ user, lastMessage }: UserTileProps) {
   return (
       <div className="flex flex-row items-start gap-2 p-2 border-b rounded-md hover:bg-accent/20 shadow-sm">
         <Avatar className="h-12 w-12">

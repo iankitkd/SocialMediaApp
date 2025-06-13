@@ -3,10 +3,10 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
+import UserTile from "./UserTile";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Search } from "lucide-react";
-import { UserTile } from "./UserTile";
 
 import { searchUsers } from "@/lib/actions/user";
 import { debounce } from "@/utils/debounce";

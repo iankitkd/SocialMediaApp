@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
 
-import ChatSection from '@/components/message/ChatSection'
+import ChatWindow from '@/components/message/ChatWindow';
 import { getConversations } from '@/lib/actions/message';
 import { getCurrentUser } from '@/lib/actions/user';
 
@@ -26,7 +26,7 @@ export default async function page() {
 
   return (
     <div className="w-screen md:w-full h-full pt-10 md:pt-0">
-      <ChatSection conversations={conversations} />
+      <ChatWindow conversations={conversations} />
     </div>
   )
 }

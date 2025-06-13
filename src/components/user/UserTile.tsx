@@ -7,7 +7,7 @@ interface UserTileProps {
   user: User;
 }
 
-export function UserTile({ user }: UserTileProps) {
+export default function UserTile({ user }: UserTileProps) {
   return (
       <div className="flex flex-row items-start gap-2 p-2 border-b rounded-md hover:bg-accent/20 shadow-sm">
         <Avatar className="h-12 w-12">
