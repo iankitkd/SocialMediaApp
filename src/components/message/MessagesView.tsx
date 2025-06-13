@@ -8,9 +8,9 @@ import { useUserStore } from '@/lib/store/userStore';
 import apiClient from '@/lib/apiClient';
 import MessageSkeleton from './MessageSkeleton';
 
-export default function MessagesView({socket}: {socket: MySocket}) {
+export default function MessagesView({socket, isTemporaryMessage}: {socket: MySocket, isTemporaryMessage: boolean}) {
   const { _id: receiverId } = useSelectedUserStore();
-  const { _id: userId } = useUserStore();
+  const { _id: userId, username } = useUserStore();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -35,10 +35,17 @@ export default function MessagesView({socket}: {socket: MySocket}) {
     }
 
     if (socket) {
-      socket.emit('joinRoom', roomId);
-      setChatHistory();
+      if(isTemporaryMessage) {
+        socket.emit('joinTempRoom', {roomId, username});
+        setMessages([]);
+      } else {
+        socket.emit('leaveTempRoom', {roomId, username});
+        socket.emit('joinRoom', roomId);
+        setChatHistory();
+      }
       socket.on('receiveMessage', (message) => {
-        if (message.roomId === roomId) {
+        const currentRoomId = `${roomId}${isTemporaryMessage && "_temp"}`;
+        if (message.roomId === currentRoomId || (message.roomId === roomId && message.type === "system")) {
           setMessages((prev) => [...prev, message]);
         }
       });
@@ -47,7 +54,7 @@ export default function MessagesView({socket}: {socket: MySocket}) {
     return () => {
       if (socket) socket.off('receiveMessage');
     };
-  }, [socket, receiverId]);
+  }, [socket, receiverId, isTemporaryMessage]);
 
 
   const scrollToBottom = () => {
@@ -61,7 +68,7 @@ export default function MessagesView({socket}: {socket: MySocket}) {
   let previousDateStr: string | null = null;
 
   return (
-    <div className='h-[calc(100dvh - 110px)] flex-col py-2 px-4 overflow-y-auto'>
+    <div className='flex-1 flex-col py-2 px-4 overflow-y-auto'>
       { 
         messagesLoading ? (
           <MessageSkeleton />
@@ -75,7 +82,7 @@ export default function MessagesView({socket}: {socket: MySocket}) {
               
             if(displayDate !== null) {
               return (
-                <div key={message._id}>
+                <div key={message._id || i}>
                   <div className='w-fit px-3 py-1 justify-self-center bg-secondary text-secondary-foreground rounded-full'>{displayDate}</div>
                   <MessageContent 
                     key={message._id || i} 

@@ -1,10 +1,18 @@
 import { useRouter } from 'next/navigation';
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { useUserStore } from '@/lib/store/userStore';
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, MessageSquare, MessageSquareDashed } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react';
 
-export default function MessageHeader({onClose}: { onClose: ()=>void }) {
+interface MessageHeaderProps {
+  onClose: () => void;
+  isTemporaryMessage: boolean;
+  setIsTemporaryMessage: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function MessageHeader({onClose, isTemporaryMessage, setIsTemporaryMessage}: MessageHeaderProps) {
   const { username, name } = useSelectedUserStore();
   const {username: currentUsername} = useUserStore();
   const router = useRouter();
@@ -21,6 +29,25 @@ export default function MessageHeader({onClose}: { onClose: ()=>void }) {
         <h3 className="text-xl leading-5 font-medium">{name}</h3>
         <p className="text-sm text-text-muted">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
       </div>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button className='px-4 hover:cursor-pointer'
+            onClick={() => setIsTemporaryMessage((prev) => !prev)}
+          >
+            {
+              isTemporaryMessage ? (
+                <MessageSquare />
+              ): (
+                <MessageSquareDashed />
+              )
+            }
+          </button>
+        </TooltipTrigger>
+        <TooltipContent className='bg-secondary text-foreground text-base'>
+          <p>{isTemporaryMessage? "Start Normal chat" : "Start Temporary chat"}</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   )
 }

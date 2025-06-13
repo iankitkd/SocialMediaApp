@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import ChatList from './ChatList';
@@ -17,18 +17,21 @@ import { useModalBackButton } from '@/hooks/useModalBackButton';
 
 export default function ChatWindow({conversations}: {conversations: Conversation[]}) {
   const { _id: receiverId } = useSelectedUserStore();
-  const clearUser = useSelectedUserStore.getState().clearUser;
+  const clearSelectedUser = useSelectedUserStore.getState().clearUser;
 
   const socket = useSocket();
   const router = useRouter();
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
+  const [isTemporaryMessage, setIsTemporaryMessage] = useState(false);
   
   const closeChatWindow = () => {
-    clearUser();
+    clearSelectedUser();
+    setIsTemporaryMessage(false);
     router.refresh();
   }
 
-  // to handle back button behavior
+  // to handle back button behavior for chat area
   useModalBackButton(!!receiverId, closeChatWindow);
 
 
@@ -44,9 +47,9 @@ export default function ChatWindow({conversations}: {conversations: Conversation
         receiverId ? (
           <div className='lg:relative fixed inset-0 w-screen lg:w-[550px] h-screen z-40 bg-background border-r'>
             <div className={`flex flex-col h-dvh transition-all duration-300`}>
-              <MessageHeader onClose={closeChatWindow}/>
-              <MessagesView socket={socket}/>
-              <MessageInput socket={socket} />
+              <MessageHeader onClose={closeChatWindow} isTemporaryMessage={isTemporaryMessage} setIsTemporaryMessage={setIsTemporaryMessage}/>
+              <MessagesView socket={socket} isTemporaryMessage={isTemporaryMessage}/>
+              <MessageInput socket={socket} isTemporaryMessage={isTemporaryMessage} />
             </div>
           </div>
         ) : isDesktop && (

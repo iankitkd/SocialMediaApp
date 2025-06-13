@@ -5,7 +5,7 @@ import { useUserStore } from '@/lib/store/userStore';
 import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { MySocket } from '@/lib/types/socket';
 
-export default function MessageInput({socket}: {socket: MySocket}) {
+export default function MessageInput({socket, isTemporaryMessage}: {socket: MySocket, isTemporaryMessage: boolean}) {
     const [newMessage, setNewMessage] = useState("");
     const [sendMessageLoading, setSendMessageLoading] = useState(false);
 
@@ -17,7 +17,7 @@ export default function MessageInput({socket}: {socket: MySocket}) {
 
       setSendMessageLoading(true);
       try {
-        socket.emit('sendMessage', { content: newMessage.trim(), receiverId, senderId });
+        socket.emit('sendMessage', { content: newMessage.trim(), receiverId, senderId, isTemporaryMessage });
         setNewMessage("");
       } catch (error) {
 
@@ -36,7 +36,7 @@ export default function MessageInput({socket}: {socket: MySocket}) {
     };
 
   return (
-    <div className='relative bottom-0 w-full p-2 border-t'>
+    <div className='p-2 border-t'>
       <div className='flex rounded-lg px-2 bg-secondary text-bg-foreground'>
         <textarea 
             ref={textareaRef}
