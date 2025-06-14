@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Send } from 'lucide-react'
 import { useUserStore } from '@/lib/store/userStore';
@@ -11,6 +11,46 @@ export default function MessageInput({socket, isTemporaryMessage}: {socket: MySo
 
     const { _id: receiverId } = useSelectedUserStore();
     const { _id: senderId } = useUserStore();
+
+    const roomId = [senderId, receiverId].sort().join('_');
+    const concatStr = isTemporaryMessage ? "_temp" : "";
+    const currentRoomId = `${roomId}${concatStr}`;
+
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const adjustHeight = () => {
+      const textarea = textareaRef.current;
+      if(textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    };
+
+    useEffect(() => {
+      // Clean up on unmount
+      return () => {
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+      };
+    }, [socket]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewMessage(e.target.value);
+      adjustHeight();
+
+      socket?.emit("typing", { roomId:currentRoomId, userId:senderId });
+
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+
+      typingTimeoutRef.current = setTimeout(() => {
+        socket?.emit("stopTyping", { roomId:currentRoomId, userId:senderId });
+      }, 2000);
+    }
+
 
     const handleSendMessage = () => {
       if(!newMessage.trim() || !socket) return;
@@ -26,14 +66,6 @@ export default function MessageInput({socket, isTemporaryMessage}: {socket: MySo
       }
     }
 
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-    const adjustHeight = () => {
-        const textarea = textareaRef.current;
-        if(textarea) {
-            textarea.style.height = "auto";
-            textarea.style.height = `${textarea.scrollHeight}px`;
-        }
-    };
 
   return (
     <div className='p-2 border-t'>
@@ -44,8 +76,7 @@ export default function MessageInput({socket, isTemporaryMessage}: {socket: MySo
             placeholder='Type a message'
             value={newMessage}
             disabled={sendMessageLoading}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onInput={adjustHeight}
+            onChange={handleInputChange}
             rows={1}
             className='w-full min-h-[40px] max-h-[75px] outline-0 resize-none overflow-y-auto px-3 py-2'
         />

@@ -46,12 +46,14 @@ export default function ChatWindow({conversations}: {conversations: Conversation
       
       {
         receiverId ? (
-          <div className={`flex flex-col lg:relative fixed inset-0 w-screen lg:w-[550px] h-dvh z-40 bg-background border-r transition-all duration-300`}  
-              style={{ height: `${viewportHeight}px` }}
-          >
-            <MessageHeader socket={socket} isTemporaryMessage={isTemporaryMessage} setIsTemporaryMessage={setIsTemporaryMessage}/>
-            <MessagesView socket={socket} isTemporaryMessage={isTemporaryMessage}/>
-            <MessageInput socket={socket} isTemporaryMessage={isTemporaryMessage} />
+          <div className='lg:relative fixed top-0 left-0 h-dvh w-screen lg:w-[550px] z-40 bg-background border-r'>
+            <div className={`flex flex-col transition-all duration-300`}  
+                style={{ height: `${viewportHeight}px` }}
+            >
+              <MessageHeader socket={socket} isTemporaryMessage={isTemporaryMessage} setIsTemporaryMessage={setIsTemporaryMessage}/>
+              <MessagesView socket={socket} isTemporaryMessage={isTemporaryMessage}/>
+              <MessageInput socket={socket} isTemporaryMessage={isTemporaryMessage} />
+            </div>
           </div>
         ) : isDesktop && (
           <div className='w-screen lg:w-[550px] h-screen border-r hidden lg:flex flex-col justify-center items-center'>

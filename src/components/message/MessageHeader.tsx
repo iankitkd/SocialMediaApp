@@ -19,6 +19,7 @@ export default function MessageHeader({socket, isTemporaryMessage, setIsTemporar
   const { _id:receiverId, username, name } = useSelectedUserStore();
   const clearSelectedUser = useSelectedUserStore.getState().clearUser;
   const [isOnline, setIsOnline] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const {username: currentUsername} = useUserStore();
   const router = useRouter();
@@ -35,6 +36,15 @@ export default function MessageHeader({socket, isTemporaryMessage, setIsTemporar
 
   useEffect(()=> {
     if(socket) {
+      // check typing status
+      socket.on("typing", ({ userId }) => {
+        if(userId === receiverId) setIsTyping(true);
+      });
+      
+      socket.on("stopTyping", ({ userId }) => {
+        if(userId === receiverId) setIsTyping(false);
+      });
+
       // check online status
       socket.on("userOnline", ({ userId }) => {
         if (userId === receiverId) setIsOnline(true);
@@ -52,6 +62,8 @@ export default function MessageHeader({socket, isTemporaryMessage, setIsTemporar
 
       return () => {
         if(socket) {
+          socket.off("typing");
+          socket.off("stopTyping");
           socket.off("userOnline");
           socket.off("userOffline");
           socket.off("userStatus");
@@ -61,32 +73,36 @@ export default function MessageHeader({socket, isTemporaryMessage, setIsTemporar
   }, [receiverId])
 
   return (
-    <div className='flex items-center gap-4 border-b h-13'>
+    <div className='flex items-center gap-1 border-b h-13 w-screen lg:w-[550px] relative'>
       <button className='px-3 py-1 text-xl h-full hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 ' 
         onClick={closeChatWindow}
       >
         <ArrowLeft />
       </button>
 
-      <div className="flex flex-col w-full px-2 py-1 rounded-sm hover:bg-secondary/50" onClick={() => router.push(`/${username}`)}>
+      <div className="flex flex-col w-[75%] px-2 py-1 rounded-sm hover:bg-secondary/50" onClick={() => router.push(`/${username}`)}>
         <div className='flex gap-2 items-baseline'>
-          <h3 className="text-xl leading-5 font-medium">{name}</h3>
-          <p className="text-sm text-muted-foreground">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
+          <h3 className="text-xl leading-5 font-medium max-w-4/5 truncate">{name}</h3>
+          <p className="text-sm text-muted-foreground truncate">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
         </div>
 
-        {
-          isOnline && (
-            <p className={`text-left text-sm text-green-500 flex items-center gap-1 leading-3 py-0`}>
-              <span className='font-bold text-xl leading-0'>&#183;</span> 
-              <span>Online</span>
-            </p>
-          )
-        }
+        <p className={`text-left text-sm flex items-center gap-1 leading-3 py-0 ${isTyping ? "text-primary": "text-green-500"}`}>
+          {
+            isTyping ? (
+              <span>Typing...</span>
+            ) : isOnline && (
+              <>
+                <span className='font-bold text-xl leading-0'>&#183;</span> 
+                <span>Online</span>
+              </>
+            )
+          }
+        </p>
        </div>
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <button className='px-4 hover:cursor-pointer'
+          <button className='px-4 hover:cursor-pointer absolute right-0 lg:right-6'
             onClick={() => setIsTemporaryMessage((prev) => !prev)}
           >
             {

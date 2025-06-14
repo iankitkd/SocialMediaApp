@@ -68,13 +68,13 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      scrollToBottom();
-    };
-    window.visualViewport?.addEventListener("resize", handleResize);
-    return () => window.visualViewport?.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     scrollToBottom();
+  //   };
+  //   window.visualViewport?.addEventListener("resize", handleResize);
+  //   return () => window.visualViewport?.removeEventListener("resize", handleResize);
+  // }, []);
 
 
   let previousDateStr: string | null = null;
