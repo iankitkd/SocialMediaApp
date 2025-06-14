@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import ChatList from './ChatList';
 import MessageHeader from './MessageHeader';
@@ -12,27 +11,29 @@ import { useSocket } from '@/hooks/useSocket';
 import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Conversation } from '@/lib/types/message';
-import { useModalBackButton } from '@/hooks/useModalBackButton';
 
 
 export default function ChatWindow({conversations}: {conversations: Conversation[]}) {
   const { _id: receiverId } = useSelectedUserStore();
-  const clearSelectedUser = useSelectedUserStore.getState().clearUser;
 
   const socket = useSocket();
-  const router = useRouter();
+  const [isTemporaryMessage, setIsTemporaryMessage] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
-  const [isTemporaryMessage, setIsTemporaryMessage] = useState(false);
-  
-  const closeChatWindow = () => {
-    clearSelectedUser();
-    setIsTemporaryMessage(false);
-    router.refresh();
-  }
+  const [viewportHeight, setViewportHeight] = useState<number>(typeof window !== "undefined" ? window.innerHeight : 0);
 
-  // to handle back button behavior for chat area
-  useModalBackButton(!!receiverId, closeChatWindow);
+  useEffect(() => {
+    const onResize = () => {
+      const viewport = window.visualViewport;
+      if (viewport) {
+        setViewportHeight(viewport.height);
+      }
+    };
+
+    onResize(); // set initial height
+    window.visualViewport?.addEventListener("resize", onResize);
+    return () => window.visualViewport?.removeEventListener("resize", onResize);
+  }, []);
 
 
   return (
@@ -46,8 +47,10 @@ export default function ChatWindow({conversations}: {conversations: Conversation
       {
         receiverId ? (
           <div className='lg:relative fixed inset-0 w-screen lg:w-[550px] h-screen z-40 bg-background border-r'>
-            <div className={`flex flex-col h-dvh transition-all duration-300`}>
-              <MessageHeader onClose={closeChatWindow} isTemporaryMessage={isTemporaryMessage} setIsTemporaryMessage={setIsTemporaryMessage}/>
+            <div className={`flex flex-col h-full transition-all duration-300`}  
+              style={{ height: `${viewportHeight}px` }}
+            >
+              <MessageHeader isTemporaryMessage={isTemporaryMessage} setIsTemporaryMessage={setIsTemporaryMessage}/>
               <MessagesView socket={socket} isTemporaryMessage={isTemporaryMessage}/>
               <MessageInput socket={socket} isTemporaryMessage={isTemporaryMessage} />
             </div>

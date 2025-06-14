@@ -5,22 +5,33 @@ import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { useUserStore } from '@/lib/store/userStore';
 import { ArrowLeft, MessageSquare, MessageSquareDashed } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react';
+import { useModalBackButton } from '@/hooks/useModalBackButton';
 
 interface MessageHeaderProps {
-  onClose: () => void;
   isTemporaryMessage: boolean;
   setIsTemporaryMessage: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function MessageHeader({onClose, isTemporaryMessage, setIsTemporaryMessage}: MessageHeaderProps) {
-  const { username, name } = useSelectedUserStore();
+export default function MessageHeader({isTemporaryMessage, setIsTemporaryMessage}: MessageHeaderProps) {
+  const { _id:receiverId, username, name } = useSelectedUserStore();
+  const clearSelectedUser = useSelectedUserStore.getState().clearUser;
+
   const {username: currentUsername} = useUserStore();
   const router = useRouter();
+
+  const closeChatWindow = () => {
+    clearSelectedUser();
+    setIsTemporaryMessage(false);
+    router.refresh();
+  }
+
+  // to handle back button behavior for chat area
+  useModalBackButton(!!receiverId, closeChatWindow);
 
   return (
     <div className='flex items-center gap-4 border-b'>
       <button className='px-3 py-1 text-xl h-full hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 ' 
-        onClick={onClose}
+        onClick={closeChatWindow}
       >
         <ArrowLeft />
       </button>

@@ -19,6 +19,8 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
 
   useEffect(() => {
     const roomId = [userId, receiverId].sort().join('_');
+    const concatStr = isTemporaryMessage ? "_temp" : "";
+    const currentRoomId = `${roomId}${concatStr}`;
 
     async function setChatHistory() {
       if(receiverId) {
@@ -44,7 +46,6 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
         setChatHistory();
       }
       socket.on('receiveMessage', (message) => {
-        const currentRoomId = `${roomId}${isTemporaryMessage && "_temp"}`;
         if (message.roomId === currentRoomId || (message.roomId === roomId && message.type === "system")) {
           setMessages((prev) => [...prev, message]);
         }
