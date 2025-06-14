@@ -53,7 +53,9 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
     }
 
     return () => {
-      if (socket) socket.off('receiveMessage');
+      if (socket) {
+        socket.off('receiveMessage');
+      }
     };
   }, [socket, receiverId, isTemporaryMessage]);
 
@@ -65,6 +67,15 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      scrollToBottom();
+    };
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () => window.visualViewport?.removeEventListener("resize", handleResize);
+  }, []);
+
 
   let previousDateStr: string | null = null;
 

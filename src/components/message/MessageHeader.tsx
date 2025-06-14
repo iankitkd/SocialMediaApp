@@ -1,20 +1,24 @@
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
-import { useUserStore } from '@/lib/store/userStore';
 import { ArrowLeft, MessageSquare, MessageSquareDashed } from 'lucide-react'
-import { Dispatch, SetStateAction } from 'react';
+
+import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
 import { useModalBackButton } from '@/hooks/useModalBackButton';
+import { useUserStore } from '@/lib/store/userStore';
+import { MySocket } from '@/lib/types/socket';
 
 interface MessageHeaderProps {
+  socket: MySocket;
   isTemporaryMessage: boolean;
   setIsTemporaryMessage: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function MessageHeader({isTemporaryMessage, setIsTemporaryMessage}: MessageHeaderProps) {
+export default function MessageHeader({socket, isTemporaryMessage, setIsTemporaryMessage}: MessageHeaderProps) {
   const { _id:receiverId, username, name } = useSelectedUserStore();
   const clearSelectedUser = useSelectedUserStore.getState().clearUser;
+  const [isOnline, setIsOnline] = useState(false);
 
   const {username: currentUsername} = useUserStore();
   const router = useRouter();
@@ -28,8 +32,36 @@ export default function MessageHeader({isTemporaryMessage, setIsTemporaryMessage
   // to handle back button behavior for chat area
   useModalBackButton(!!receiverId, closeChatWindow);
 
+
+  useEffect(()=> {
+    if(socket) {
+      // check online status
+      socket.on("userOnline", ({ userId }) => {
+        if (userId === receiverId) setIsOnline(true);
+      });
+
+      socket.on("userOffline", ({ userId }) => {
+        if (userId === receiverId) setIsOnline(false);
+      });
+
+      // check on mounting
+      socket.emit("checkUserStatus", { userId: receiverId });
+      socket.on("userStatus", ({ userId, online }) => {
+        if (userId === receiverId) setIsOnline(online);
+      });
+
+      return () => {
+        if(socket) {
+          socket.off("userOnline");
+          socket.off("userOffline");
+          socket.off("userStatus");
+        }
+      };
+    }
+  }, [receiverId])
+
   return (
-    <div className='flex items-center gap-4 border-b'>
+    <div className='flex items-center gap-4 border-b h-13'>
       <button className='px-3 py-1 text-xl h-full hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 ' 
         onClick={closeChatWindow}
       >
@@ -37,9 +69,20 @@ export default function MessageHeader({isTemporaryMessage, setIsTemporaryMessage
       </button>
 
       <div className="flex flex-col w-full px-2 py-1 rounded-sm hover:bg-secondary/50" onClick={() => router.push(`/${username}`)}>
-        <h3 className="text-xl leading-5 font-medium">{name}</h3>
-        <p className="text-sm text-text-muted">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
-      </div>
+        <div className='flex gap-2 items-baseline'>
+          <h3 className="text-xl leading-5 font-medium">{name}</h3>
+          <p className="text-sm text-muted-foreground">{username === currentUsername ? `(Message Yourself)` : `@${username}`}</p>
+        </div>
+
+        {
+          isOnline && (
+            <p className={`text-left text-sm text-green-500 flex items-center gap-1 leading-3 py-0`}>
+              <span className='font-bold text-xl leading-0'>&#183;</span> 
+              <span>Online</span>
+            </p>
+          )
+        }
+       </div>
 
       <Tooltip>
         <TooltipTrigger asChild>
