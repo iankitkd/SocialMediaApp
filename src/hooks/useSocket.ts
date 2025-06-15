@@ -17,13 +17,17 @@ export function useSocket() {
 
     setSocket(socketIo);
 
-    // register user for showing online status
-    socketIo.emit("register", userId);
-
     return () => {
       socketIo.disconnect();
     };
   }, []);
+  
+  useEffect(() => {
+    if (socket && userId) {
+      // register user for showing online status
+      socket.emit("register", userId);
+    }
+  }, [socket, userId]);
 
   return socket;
 };

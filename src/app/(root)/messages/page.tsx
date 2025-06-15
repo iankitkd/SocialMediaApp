@@ -25,7 +25,7 @@ export default async function page() {
   }
 
   return (
-    <div className="w-screen md:w-full overflow-hidden pt-11 md:pt-0">
+    <div className="w-screen md:w-full pt-11 md:pt-0">
       <ChatWindow conversations={conversations} />
     </div>
   )

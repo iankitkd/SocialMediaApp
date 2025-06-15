@@ -73,7 +73,7 @@ export default function MessageHeader({socket, isTemporaryMessage, setIsTemporar
   }, [receiverId])
 
   return (
-    <div className='flex items-center gap-1 border-b h-13 w-screen lg:w-[550px] relative'>
+    <div className='flex items-center gap-1 border-b h-13 w-full relative'>
       <button className='px-3 py-1 text-xl h-full hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 ' 
         onClick={closeChatWindow}
       >

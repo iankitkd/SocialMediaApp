@@ -11,6 +11,11 @@ export interface Message {
 
 export interface Conversation {
   _id: string;
-  participants: User[];
-  lastMessage: Message;
+  userId: string;
+  conversationId: {
+    _id: string;
+    participants: User[];
+    lastMessage: Message;
+  }
+  unreadCount: number;
 }

@@ -10,7 +10,7 @@ export default function ProfilePostsTabs({ username }: { username: string }) {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-0 z-10 bg-background/90 w-full flex gap-2 items-center justify-around border-b p-2">
+    <div className="sticky top-0 z-10 bg-background w-full flex gap-2 items-center justify-around border-b p-2">
       <Link 
         href={`/${username}`} 
         className={`${pathname === `/${username}` 
