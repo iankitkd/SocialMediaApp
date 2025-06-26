@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import { appEnv } from '@/lib/env';
 
-const BACKEND_URL = process.env.BACKEND_API_URL
+const BACKEND_URL = appEnv.BACKEND_API_URL
 
 export async function POST(request: Request) {
   try {

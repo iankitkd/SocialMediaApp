@@ -5,8 +5,8 @@ import PostDisplay from "@/components/post/PostDisplay";
 import ReplyPostSection from "@/components/post/ReplyPostSection";
 import TopBackButton from "@/components/shared/TopBackButton";
 
-import { getPostDetails } from "@/lib/actions/post";
-import { getPostReplies } from "@/lib/actions/reply";
+import { getPostDetails } from "@/actions/post";
+import { getPostReplies } from "@/actions/reply";
 
 type Params = Promise<{ postId: string }>
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>

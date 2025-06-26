@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Send } from 'lucide-react'
-import { useUserStore } from '@/lib/store/userStore';
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
-import { MySocket } from '@/lib/types/socket';
+import { useUserStore } from '@/store/userStore';
+import { useSelectedUserStore } from '@/store/selectedUserStore';
+import { MySocket } from '@/types/socket';
 
 export default function MessageInput({socket, isTemporaryMessage}: {socket: MySocket, isTemporaryMessage: boolean}) {
     const [newMessage, setNewMessage] = useState("");

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 import { bottomNavItems } from "@/data/navItems"
-import { useUserStore } from "@/lib/store/userStore";
+import { useUserStore } from "@/store/userStore";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 

@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 
 import CreatePost from "./CreatePost";
 import { getInitials } from "@/utils/getInitials";
-import { useUserStore } from "@/lib/store/userStore"
+import { useUserStore } from "@/store/userStore"
 
 export default function ReplyPostSection({postId, reply}: {postId: string, reply: boolean}) {
     const [isReplying, setIsReplying] = useState(reply);

@@ -1,4 +1,4 @@
-import { Message } from '@/lib/types/message';
+import { Message } from '@/types/message';
 
 interface ChatMessageProps {
   message: Message;

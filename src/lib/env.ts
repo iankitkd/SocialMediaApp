@@ -1,0 +1,7 @@
+export const appEnv = {
+  BACKEND_API_URL: process.env.BACKEND_API_URL,
+
+  NEXT_PUBLIC_SOCKET_URL: process.env. NEXT_PUBLIC_SOCKET_URL,
+  NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+};

@@ -13,9 +13,10 @@ import { sideNavItems } from "@/data/navItems"
 import IconLinkButton from "../shared/IconLinkButton"
 import TextLinkButton from "../shared/TextLinkButton"
 
-import { useUserStore } from "@/lib/store/userStore"
+import { useUserStore } from "@/store/userStore"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { cn } from "@/lib/utils"
+import { appEnv } from "@/lib/env"
 import { getInitials } from "@/utils/getInitials"
 
 export default function SideNav() {
@@ -45,7 +46,7 @@ function SideNavContent() {
           <div className="flex gap-2 items-center pl-2 mb-8">
             <Hash strokeWidth={1.5} size={32} className="text-primary" />
             <h1 className="hidden lg:block text-2xl font-bold bg-gradient-to-b from-blue-500 to-purple-600 bg-clip-text text-transparent">
-              {process.env.NEXT_PUBLIC_APP_NAME}
+              {appEnv.NEXT_PUBLIC_APP_NAME}
             </h1>
           </div>
 

@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, MessageSquare, MessageSquareDashed } from 'lucide-react'
 
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
+import { useSelectedUserStore } from '@/store/selectedUserStore';
 import { useModalBackButton } from '@/hooks/useModalBackButton';
-import { useUserStore } from '@/lib/store/userStore';
-import { MySocket } from '@/lib/types/socket';
+import { useUserStore } from '@/store/userStore';
+import { MySocket } from '@/types/socket';
 
 interface MessageHeaderProps {
   socket: MySocket;

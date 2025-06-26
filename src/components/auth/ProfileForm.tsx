@@ -14,10 +14,10 @@ import DatePicker from "../shared/DatePicker"
 import { CircleCheckBig, CircleUserRound, CircleX, LoaderCircle } from 'lucide-react'
 import { toast } from "sonner"
 
-import { profileSchema, ProfileValues } from "@/lib/validations/user"
-import { isUsernameAvailable, updateUser } from "@/lib/actions/user"
+import { profileSchema, ProfileValues } from "@/validators/user"
+import { isUsernameAvailable, updateUser } from "@/actions/user"
 import { debounce } from "@/utils/debounce"
-import { useUserStore } from "@/lib/store/userStore"
+import { useUserStore } from "@/store/userStore"
 
 type ProfileFormProps = {
   mode: 'onboarding' | 'edit';

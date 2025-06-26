@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { ArrowRight, Hash } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { appEnv } from '@/lib/env';
 
-const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Social App";
+const APP_NAME = appEnv.NEXT_PUBLIC_APP_NAME || "Social App";
 
 export default function Home() {
   return (

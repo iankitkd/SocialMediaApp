@@ -14,10 +14,10 @@ import { toast } from "sonner";
 import { formatPostDate } from "@/utils/formatPostDate";
 import { getInitials } from "@/utils/getInitials";
 import { handleCopyLink, handleShare } from "@/utils/navigatorShare";
-import { Post } from "@/lib/types/post";
+import { Post } from "@/types/post";
 
-import { likePost, unlikePost } from "@/lib/actions/like";
-import { useUserStore } from "@/lib/store/userStore";
+import { likePost, unlikePost } from "@/actions/like";
+import { useUserStore } from "@/store/userStore";
 
 interface PostCardProps {
   post: Post;

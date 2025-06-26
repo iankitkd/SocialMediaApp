@@ -1,13 +1,14 @@
 "use server"
 
-import apiClientAction from "./apiClientAction";
-import { Post, Pagination } from "../types/post";
+import serverApiRequest from "@/lib/serverApiRequest";
+import { appEnv } from "@/lib/env";
+import { Post, Pagination } from "@/types/post";
 
-const BACKEND_URL = process.env.BACKEND_API_URL;
+const BACKEND_URL = appEnv.BACKEND_API_URL;
 
 export async function getPostReplies(postId:string, page=1, limit=10): Promise<{ posts: Post[], pagination: Pagination }> {
     try {
-        const response = await apiClientAction(`${BACKEND_URL}/posts/${postId}/replies?page=${page}&limit=${limit}`, "GET");
+        const response = await serverApiRequest(`${BACKEND_URL}/posts/${postId}/replies?page=${page}&limit=${limit}`, "GET");
         const posts = response.data.posts;
         const pagination = response.data.pagination;
         return {posts, pagination};
@@ -18,7 +19,7 @@ export async function getPostReplies(postId:string, page=1, limit=10): Promise<{
 
 export async function getUserReplies(username:string, page=1, limit=10): Promise<{ posts: Post[], pagination: Pagination }> {
     try {
-        const response = await apiClientAction(`${BACKEND_URL}/users/${username}/replies?page=${page}&limit=${limit}`, "GET");
+        const response = await serverApiRequest(`${BACKEND_URL}/users/${username}/replies?page=${page}&limit=${limit}`, "GET");
         const posts = response.data.posts;
         const pagination = response.data.pagination;
         return {posts, pagination};

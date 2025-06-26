@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { redirect } from 'next/navigation';
 
 import ProfileForm from '@/components/auth/ProfileForm'
-import { getCurrentUser } from '@/lib/actions/user';
+import { getCurrentUser } from '@/actions/user';
 
 export default async function page() {
   const user = await getCurrentUser();

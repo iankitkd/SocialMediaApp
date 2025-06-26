@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import PostCard from './PostCard'
 
 import { LoaderCircle } from 'lucide-react';
-import { Pagination, Post } from '@/lib/types/post';
+import { Pagination, Post } from '@/types/post';
 
-import { deletePost, getLatestPosts, getUserPosts } from '@/lib/actions/post';
-import { getLikedPosts } from '@/lib/actions/like';
-import { getPostReplies, getUserReplies } from '@/lib/actions/reply';
+import { deletePost, getLatestPosts, getUserPosts } from '@/actions/post';
+import { getLikedPosts } from '@/actions/like';
+import { getPostReplies, getUserReplies } from '@/actions/reply';
 
 interface PostDisplayProps {
     initialPosts: Post[];

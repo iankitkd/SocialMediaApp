@@ -1,7 +1,8 @@
-import apiClientAction from "@/lib/actions/apiClientAction";
 import { NextResponse } from "next/server"
+import serverApiRequest from "@/lib/serverApiRequest";
+import { appEnv } from "@/lib/env";
 
-const BACKEND_URL = process.env.BACKEND_API_URL;
+const BACKEND_URL = appEnv.BACKEND_API_URL;
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
         );
     }
 
-    const messages = await apiClientAction(`${BACKEND_URL}/messages/${receiverId}`, "GET");
+    const messages = await serverApiRequest(`${BACKEND_URL}/messages/${receiverId}`, "GET");
     return NextResponse.json({messages: messages.data, status: 200});
   } catch (error) {
     console.log(error)

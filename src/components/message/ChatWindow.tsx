@@ -8,9 +8,9 @@ import MessagesView from './MessagesView';
 import MessageInput from './MessageInput';
 
 import { useSocket } from '@/hooks/useSocket';
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
+import { useSelectedUserStore } from '@/store/selectedUserStore';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { Conversation } from '@/lib/types/message';
+import { Conversation } from '@/types/message';
 
 
 export default function ChatWindow({conversations}: {conversations: Conversation[]}) {

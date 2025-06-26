@@ -5,7 +5,7 @@ import PostDisplay from "@/components/post/PostDisplay";
 import IconLinkButton from "@/components/shared/IconLinkButton";
 import { Feather } from "lucide-react";
 
-import { getLatestPosts } from "@/lib/actions/post";
+import { getLatestPosts } from "@/actions/post";
 
 export default async function page() {
 

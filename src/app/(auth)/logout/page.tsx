@@ -5,8 +5,8 @@ import { useState } from 'react'
 
 import { toast } from 'sonner';
 import ConfirmationCard from '@/components/shared/ConfirmationCard'
-import apiClient from '@/lib/apiClient';
-import { useUserStore } from '@/lib/store/userStore';
+import apiRequest from '@/lib/apiRequest';
+import { useUserStore } from '@/store/userStore';
 
 export default function page() {
     const router = useRouter();
@@ -14,7 +14,7 @@ export default function page() {
 
     const handleLogout = async () => {
       setIsLoading(true);
-      await apiClient('/api/signout', "POST");
+      await apiRequest('/api/signout', "POST");
       useUserStore.getState().clearUser()
       toast.success("Logged out successfully");
       router.push('/login');

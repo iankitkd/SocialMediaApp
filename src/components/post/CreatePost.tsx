@@ -12,8 +12,8 @@ import { toast } from "sonner";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { getInitials } from "@/utils/getInitials";
-import { useUserStore } from "@/lib/store/userStore";
-import { createPost } from "@/lib/actions/post";
+import { useUserStore } from "@/store/userStore";
+import { createPost } from "@/actions/post";
 
 type Mode = "post" | "reply" | "home";
 

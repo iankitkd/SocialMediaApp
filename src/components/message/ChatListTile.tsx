@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { getInitials } from "@/utils/getInitials";
 import { formatPostDate } from "@/utils/formatPostDate";
-import { User } from "@/lib/types/user";
-import { Message } from "@/lib/types/message";
+import { User } from "@/types/user";
+import { Message } from "@/types/message";
 
 interface UserTileProps {
   user: User;

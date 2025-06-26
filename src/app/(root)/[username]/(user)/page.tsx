@@ -1,5 +1,5 @@
 import PostDisplay from "@/components/post/PostDisplay";
-import { getUserPosts } from "@/lib/actions/post";
+import { getUserPosts } from "@/actions/post";
 
 type Params = Promise<{ username: string }>
 

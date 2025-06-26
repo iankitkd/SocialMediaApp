@@ -3,7 +3,7 @@ import { Geist, Geist_Mono, Inter, Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
 
-import UserStoreInitializer from "@/lib/store/userStoreInitializer";
+import UserStoreInitializer from "@/store/userStoreInitializer";
 
 const inter = Inter({
   variable: "--font-inter",

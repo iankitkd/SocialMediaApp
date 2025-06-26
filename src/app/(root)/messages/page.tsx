@@ -3,8 +3,8 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 
 import ChatWindow from '@/components/message/ChatWindow';
-import { getConversations } from '@/lib/actions/message';
-import { getCurrentUser } from '@/lib/actions/user';
+import { getConversations } from '@/actions/message';
+import { getCurrentUser } from '@/actions/user';
 
 export default async function page() {
   const user = await getCurrentUser();

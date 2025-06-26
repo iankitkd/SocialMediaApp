@@ -12,9 +12,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { LoaderCircle, Mail, Lock, User, Eye, EyeOff } from 'lucide-react'
 import { toast } from "sonner"
 
-import { signinSchema, signupSchema, AuthValues } from "@/lib/validations/user"
-import apiClient from "@/lib/apiClient"
-import { useUserStore } from "@/lib/store/userStore"
+import { signinSchema, signupSchema, AuthValues } from "@/validators/user"
+import apiRequest from "@/lib/apiRequest"
+import { useUserStore } from "@/store/userStore"
 
 type AuthFormProps = {
   mode: 'signup' | 'signin'
@@ -38,7 +38,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setIsLoading(true)
 
     try {
-      const user = await apiClient('/api/auth', 'POST', {
+      const user = await apiRequest('/api/auth', 'POST', {
         data: {...values, mode}
       });
 

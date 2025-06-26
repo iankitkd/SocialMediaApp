@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { useUserStore } from '@/lib/store/userStore';
+import { useUserStore } from '@/store/userStore';
 
 export default function ProfilePostsTabs({ username }: { username: string }) {
   const {username: currentUsername} = useUserStore();

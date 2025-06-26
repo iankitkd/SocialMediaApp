@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Search } from "lucide-react";
 
-import { searchUsers } from "@/lib/actions/user";
+import { searchUsers } from "@/actions/user";
 import { debounce } from "@/utils/debounce";
-import { useSelectedUserStore } from "@/lib/store/selectedUserStore";
-import { User } from "@/lib/types/user";
+import { useSelectedUserStore } from "@/store/selectedUserStore";
+import { User } from "@/types/user";
 
 
 interface UserSearchProps {

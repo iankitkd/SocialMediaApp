@@ -5,10 +5,10 @@ import ChatListTile from "./ChatListTile";
 import IconClickButton from "../shared/IconClickButton";
 import { MessageSquarePlus } from "lucide-react";
 
-import { useSelectedUserStore } from "@/lib/store/selectedUserStore";
-import { useUserStore } from "@/lib/store/userStore";
+import { useSelectedUserStore } from "@/store/selectedUserStore";
+import { useUserStore } from "@/store/userStore";
 import { useModalBackButton } from "@/hooks/useModalBackButton";
-import { Conversation } from "@/lib/types/message";
+import { Conversation } from "@/types/message";
 import { useRouter } from "next/navigation";
 
 export default function ChatList({conversations}: {conversations: Conversation[]}) {

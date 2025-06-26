@@ -8,7 +8,7 @@ import TopBackButton from "@/components/shared/TopBackButton"
 import { Feather } from "lucide-react"
 import { formatDate } from "date-fns"
 import { reservedUsernames } from "@/data/reservedUsernames"
-import { getUserByUsername } from "@/lib/actions/user"
+import { getUserByUsername } from "@/actions/user"
 
 type Params = Promise<{ username:string}>
 

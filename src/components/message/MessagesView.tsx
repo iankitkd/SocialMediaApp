@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
 import MessageContent from './MessageContent';
-import { useSelectedUserStore } from '@/lib/store/selectedUserStore';
-import { Message } from '@/lib/types/message';
-import { MySocket } from '@/lib/types/socket';
-import { useUserStore } from '@/lib/store/userStore';
-import apiClient from '@/lib/apiClient';
+import { useSelectedUserStore } from '@/store/selectedUserStore';
+import { Message } from '@/types/message';
+import { MySocket } from '@/types/socket';
+import { useUserStore } from '@/store/userStore';
+import apiRequest from '@/lib/apiRequest';
 import MessageSkeleton from './MessageSkeleton';
 
 export default function MessagesView({socket, isTemporaryMessage}: {socket: MySocket, isTemporaryMessage: boolean}) {
@@ -26,7 +26,7 @@ export default function MessagesView({socket, isTemporaryMessage}: {socket: MySo
       if(receiverId) {
         setMessagesLoading(true);
         try {
-          const {messages} = await apiClient(`/api/messages`, "POST", {data: {receiverId}});
+          const {messages} = await apiRequest(`/api/messages`, "POST", {data: {receiverId}});
           setMessages(messages);
         } catch (error) {
 
